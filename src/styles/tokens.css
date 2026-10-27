@@ -1,0 +1,82 @@
+/*
+ * Okuru design tokens — the single place for color, type, radius, spacing, shadow, motion.
+ * Palette is a first draft. Dark mode: override the raw vars under [data-theme='dark'].
+ */
+:root {
+  /* paper & ink */
+  --paper: #faf6ef;
+  --paper-sunken: #f3ecdf;
+  --card: #fffdf8;
+  --line: #e6dccb;
+  --line-strong: #cfc2ad;
+  --ink: #2b2620;
+  --ink-soft: #62594e;
+  --ink-faint: #766c60;
+
+  /* the one accent: muted persimmon */
+  --accent: #b5533c;
+  --accent-strong: #983f2b;
+  --accent-soft: #f4e1d8;
+  --on-accent: #fffaf4;
+
+  /* quiet support */
+  --moss: #5d6b4f;
+  --moss-soft: #e4e8d9;
+
+  /* type */
+  --font-display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* radius */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-sheet: 28px;
+
+  /* spacing scale (rem steps used for layout rhythm) */
+  --space-page-x: 1.25rem;
+  --space-section: 2rem;
+
+  /* shadow */
+  --shadow-card: 0 1px 0 rgb(43 38 32 / 0.04), 0 6px 20px -10px rgb(43 38 32 / 0.18);
+  --shadow-sheet: 0 -12px 40px -12px rgb(43 38 32 / 0.28);
+
+  /* motion */
+  --ease-soft: cubic-bezier(0.22, 0.8, 0.3, 1);
+  --dur-fast: 140ms;
+  --dur-base: 280ms;
+
+  /* layout */
+  --tab-height: 4rem;
+  --nav-width: 15rem;
+  --column-max: 40rem;
+}
+
+/* Expose tokens to Tailwind utilities (bg-paper, text-ink, font-display, rounded-md ...). */
+@theme inline {
+  --color-paper: var(--paper);
+  --color-sunken: var(--paper-sunken);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --color-moss: var(--moss);
+  --color-moss-soft: var(--moss-soft);
+
+  --font-display: var(--font-display);
+  --font-sans: var(--font-ui);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-sheet: var(--radius-sheet);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-sheet: var(--shadow-sheet);
+}
