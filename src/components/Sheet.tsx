@@ -40,7 +40,7 @@ export function Sheet({ open, onClose, title, children }: Props) {
             className="bg-line-strong mx-auto mb-3 h-1 w-10 rounded-full sm:hidden"
           />
           <div className="mb-3 flex items-center justify-between">
-            <h2 id="sheet-title" className="font-display text-xl">
+            <h2 id="sheet-title" className="font-display text-title">
               {title}
             </h2>
             <button

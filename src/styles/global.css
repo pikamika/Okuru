@@ -10,15 +10,16 @@
   }
   body {
     min-height: 100dvh;
-    background: var(--paper);
+    background: var(--grain), var(--paper);
     -webkit-font-smoothing: antialiased;
   }
   h1,
   h2,
   h3 {
     font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: -0.01em;
+    font-weight: 380;
+    letter-spacing: -0.012em;
+    font-optical-sizing: auto;
   }
   button,
   a,
@@ -35,6 +36,23 @@
   }
   ::placeholder {
     color: var(--ink-faint);
+  }
+}
+
+@layer components {
+  /* A card is a slip of paper: hairline edge, barely lifted. */
+  .paper-card {
+    background: var(--grain), var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+  }
+  .eyebrow {
+    font-size: var(--text-eyebrow);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 500;
   }
 }
 

@@ -11,8 +11,8 @@ export function MilestoneCard({ suggestion }: { suggestion: MilestoneSuggestion 
   const dateId = `milestone-date-${suggestion.id}`
 
   return (
-    <article className="anim-rise border-line bg-card shadow-card rounded-lg border p-5">
-      <p className="font-display text-lg leading-snug">{suggestion.prompt}</p>
+    <article className="anim-rise border-line-strong bg-sunken/50 rounded-lg border border-dashed p-5">
+      <p className="font-display text-quote">{suggestion.prompt}</p>
       <div className="mt-4 flex flex-wrap items-end gap-3">
         <div className="flex flex-col gap-1.5">
           <label htmlFor={dateId} className="text-ink-soft text-sm">

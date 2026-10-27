@@ -92,7 +92,7 @@ export function PersonProfile() {
       <header className="flex items-center gap-4">
         <Avatar name={person.name} size={64} />
         <div className="min-w-0 flex-1">
-          <h1 className="font-display text-[2rem] leading-tight">{person.name}</h1>
+          <h1 className="font-display text-display">{person.name}</h1>
           {person.relationship && <p className="text-ink-soft">{person.relationship}</p>}
         </div>
       </header>

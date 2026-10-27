@@ -20,7 +20,7 @@ export function EmptyState({
         />
         <circle cx="62" cy="4" r="2" fill="currentColor" />
       </svg>
-      <h2 className="font-display text-xl">{title}</h2>
+      <h2 className="font-display text-title">{title}</h2>
       {children && <p className="text-ink-soft text-[0.95rem] leading-relaxed">{children}</p>}
       {action}
     </div>

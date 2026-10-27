@@ -67,7 +67,7 @@ export function Onboarding() {
               />
               <circle cx="117" cy="6" r="3" fill="currentColor" />
             </svg>
-            <h1 className="font-display text-4xl leading-tight">Make thoughtfulness tangible.</h1>
+            <h1 className="font-display text-display md:text-5xl">Make thoughtfulness tangible.</h1>
             <p className="text-ink-soft mt-4 text-lg leading-relaxed">
               Okuru is a small notebook for the people you care about. You jot down what you notice,
               and it finds its way back to you when a moment draws near.
@@ -81,8 +81,8 @@ export function Onboarding() {
           </div>
         ) : (
           <div className="anim-fade">
-            <p className="text-ink-faint mb-1 text-sm">Two or three is plenty</p>
-            <h1 className="font-display text-3xl leading-tight">Who’s on your mind?</h1>
+            <p className="eyebrow mb-1.5">Two or three is plenty</p>
+            <h1 className="font-display text-display">Who’s on your mind?</h1>
             <p className="text-ink-soft mt-2">
               Add a name and whatever you already remember about them. One thought per line. Rough
               is fine.
@@ -90,7 +90,7 @@ export function Onboarding() {
 
             <div className="mt-8 flex flex-col gap-6">
               {drafts.map((d, i) => (
-                <fieldset key={i} className="border-line bg-card shadow-card rounded-lg border p-5">
+                <fieldset key={i} className="paper-card p-5">
                   <legend className="font-display px-2 text-lg">Person {i + 1}</legend>
                   <div className="flex flex-col gap-4">
                     <FormField label="Name">

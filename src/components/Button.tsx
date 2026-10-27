@@ -4,7 +4,7 @@ import { cn } from '@/lib/cn'
 type Variant = 'primary' | 'soft' | 'ghost'
 
 const styles: Record<Variant, string> = {
-  primary: 'bg-accent text-on-accent hover:bg-accent-strong shadow-card',
+  primary: 'bg-accent text-on-accent hover:bg-accent-strong',
   soft: 'bg-sunken text-ink hover:bg-line',
   ghost: 'text-ink-soft hover:bg-sunken',
 }

@@ -3,25 +3,29 @@
  * Palette is a first draft. Dark mode: override the raw vars under [data-theme='dark'].
  */
 :root {
-  /* paper & ink */
-  --paper: #faf6ef;
-  --paper-sunken: #f3ecdf;
-  --card: #fffdf8;
-  --line: #e6dccb;
-  --line-strong: #cfc2ad;
-  --ink: #2b2620;
-  --ink-soft: #62594e;
-  --ink-faint: #766c60;
+  /* paper & ink: kinari paper, sumi ink */
+  --paper: #f5efe3;
+  --paper-sunken: #ece4d4;
+  --card: #faf6ec;
+  --line: #ded3bf;
+  --line-strong: #c4b69c;
+  --ink: #2a2521;
+  --ink-soft: #5c5347;
+  --ink-faint: #6f6558;
 
-  /* the one accent: muted persimmon */
-  --accent: #b5533c;
-  --accent-strong: #983f2b;
-  --accent-soft: #f4e1d8;
-  --on-accent: #fffaf4;
+  /* the one accent: a dusty madder red, like dyed cord */
+  --accent: #9c4338;
+  --accent-strong: #82342b;
+  --accent-soft: #ebd5ca;
+  --on-accent: #fbf5ea;
+  --thread: color-mix(in srgb, var(--accent) 55%, transparent);
 
   /* quiet support */
   --moss: #5d6b4f;
   --moss-soft: #e4e8d9;
+
+  /* paper grain: a whisper of fibre, not a texture */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .28 0 0 0 0 .2 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 
   /* type */
   --font-display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
@@ -29,8 +33,8 @@
 
   /* radius */
   --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 22px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
   --radius-sheet: 28px;
 
   /* spacing scale (rem steps used for layout rhythm) */
@@ -38,7 +42,7 @@
   --space-section: 2rem;
 
   /* shadow */
-  --shadow-card: 0 1px 0 rgb(43 38 32 / 0.04), 0 6px 20px -10px rgb(43 38 32 / 0.18);
+  --shadow-card: 0 1px 0 rgb(42 37 33 / 0.03), 0 10px 24px -18px rgb(42 37 33 / 0.28);
   --shadow-sheet: 0 -12px 40px -12px rgb(43 38 32 / 0.28);
 
   /* motion */
@@ -50,6 +54,19 @@
   --tab-height: 4rem;
   --nav-width: 15rem;
   --column-max: 40rem;
+}
+
+/* Type scale. Display is Fraunces; UI is Inter. */
+@theme {
+  --text-display: 2.125rem;
+  --text-display--line-height: 1.12;
+  --text-display--letter-spacing: -0.018em;
+  --text-title: 1.3rem;
+  --text-title--line-height: 1.25;
+  --text-quote: 1.2rem;
+  --text-quote--line-height: 1.55;
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--letter-spacing: 0.08em;
 }
 
 /* Expose tokens to Tailwind utilities (bg-paper, text-ink, font-display, rounded-md ...). */

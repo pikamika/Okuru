@@ -44,7 +44,7 @@ export function TagInput({ value, onChange, label = 'Add a detail' }: Props) {
               key={`${t.kind}-${t.label}`}
               className="bg-sunken flex items-center gap-1 rounded-full py-1 pr-1 pl-3 text-sm"
             >
-              <span className="text-ink-faint">{kindLabels[t.kind].toLowerCase()}</span>
+              <span className="sr-only">{kindLabels[t.kind]}: </span>
               <span>{t.label}</span>
               <button
                 type="button"
@@ -66,7 +66,7 @@ export function TagInput({ value, onChange, label = 'Add a detail' }: Props) {
           id={`${id}-kind`}
           value={kind}
           onChange={(e) => setKind(e.target.value as PersonTagKind)}
-          className={`${inputClass} w-28 shrink-0`}
+          className={`${inputClass} w-28! shrink-0`}
         >
           {(Object.keys(kindLabels) as PersonTagKind[]).map((k) => (
             <option key={k} value={k}>

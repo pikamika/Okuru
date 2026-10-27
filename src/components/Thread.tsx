@@ -2,54 +2,69 @@ import type { ReactNode } from 'react'
 import { cn } from '@/lib/cn'
 
 /**
- * The recurring thread: a single continuous line linking things that belong together.
- * `ThreadList` runs it down the left of a stream; `ThreadCurve` links two blocks.
+ * The thread: one continuous cord that ties thoughts, moments and gifts together.
+ * Built from three parts: `Knot` (a point on the cord), `ThreadList` (the cord down a stream),
+ * and `ThreadBridge` (a slack curve linking one block to the next).
  */
-export function ThreadList({ children, className }: { children: ReactNode; className?: string }) {
+
+/** A small mizuhiki-style knot: a ring on the cord, filled when something is tied to it. */
+export function Knot({ tied, className }: { tied?: boolean; className?: string }) {
   return (
-    <ol className={cn('border-line-strong relative ml-[9px] border-l border-dashed', className)}>
-      {children}
-    </ol>
+    <span
+      aria-hidden
+      className={cn(
+        'bg-paper grid size-[13px] place-items-center rounded-full border-[1.5px]',
+        tied ? 'border-accent' : 'border-line-strong',
+        className,
+      )}
+    >
+      {tied && <span className="bg-accent size-[4px] rounded-full" />}
+    </span>
   )
 }
 
-export function ThreadItem({ children, active }: { children: ReactNode; active?: boolean }) {
+export function ThreadList({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <li className="relative pb-6 pl-6 last:pb-0">
-      <span
-        aria-hidden
-        className={cn(
-          'ring-paper absolute top-[0.55rem] -left-[5px] size-[9px] rounded-full ring-4',
-          active ? 'bg-accent' : 'bg-line-strong',
-        )}
-      />
+    <ol className={cn('border-line-strong relative ml-[6px] border-l', className)}>{children}</ol>
+  )
+}
+
+export function ThreadItem({ children, tied }: { children: ReactNode; tied?: boolean }) {
+  return (
+    <li className="relative pb-7 pl-7 last:pb-0">
+      <Knot tied={tied} className="absolute top-[0.45rem] -left-[7px]" />
       {children}
     </li>
   )
 }
 
-export function ThreadCurve({ className }: { className?: string }) {
+/**
+ * Slack in the cord between two blocks. Sits at a fixed x so the thread reads as one line
+ * running down the page behind the cards. `x` is the cord's distance from the left edge.
+ */
+export function ThreadBridge({ x = 41, height = 32 }: { x?: number; height?: number }) {
   return (
     <svg
       aria-hidden
-      viewBox="0 0 24 40"
-      className={cn('text-accent h-10 w-6', className)}
+      width={x + 16}
+      height={height}
+      viewBox={`0 0 ${x + 16} ${height}`}
+      className="block overflow-visible text-[var(--thread)]"
       fill="none"
     >
       <path
-        d="M12 0C12 14 4 14 4 24s8 10 8 16"
+        d={`M${x} 0C${x + 14} ${height * 0.3} ${x + 14} ${height * 0.7} ${x} ${height}`}
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.4"
         strokeLinecap="round"
-        strokeDasharray="1 4"
       />
     </svg>
   )
 }
 
-/** Progress as a thread with knots, used in gift projects. */
+/** Progress as a cord with one knot per step. Tied knots are the steps already done. */
 export function ThreadProgress({ done, total }: { done: number; total: number }) {
-  const pct = total === 0 ? 0 : (done / total) * 100
+  const count = Math.max(total, 1)
   return (
     <div
       role="progressbar"
@@ -57,17 +72,23 @@ export function ThreadProgress({ done, total }: { done: number; total: number })
       aria-valuemax={total}
       aria-valuenow={done}
       aria-label="Preparation progress"
-      className="relative h-3"
+      className="relative flex h-4 items-center justify-between px-[7px]"
     >
-      <div className="bg-line-strong absolute top-1/2 h-px w-full -translate-y-1/2" />
+      <div className="bg-line-strong absolute inset-x-[7px] top-1/2 h-px" />
       <div
-        className="bg-accent absolute top-1/2 h-0.5 -translate-y-1/2 rounded-full transition-[width] duration-[var(--dur-base)] ease-[var(--ease-soft)]"
-        style={{ width: `${pct}%` }}
+        className="bg-accent absolute top-1/2 left-[7px] h-[1.5px] -translate-y-1/2 transition-[width] duration-[var(--dur-base)] ease-[var(--ease-soft)]"
+        style={{
+          width:
+            total <= 1
+              ? done > 0
+                ? 'calc(100% - 14px)'
+                : '0'
+              : `calc((100% - 14px) * ${Math.min(done, total - 1) / (total - 1)})`,
+        }}
       />
-      <div
-        className="bg-accent ring-paper absolute top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full ring-4 transition-[left] duration-[var(--dur-base)] ease-[var(--ease-soft)]"
-        style={{ left: `${pct}%` }}
-      />
+      {Array.from({ length: count }, (_, i) => (
+        <Knot key={i} tied={i < done} className="relative" />
+      ))}
     </div>
   )
 }

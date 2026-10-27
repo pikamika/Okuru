@@ -14,8 +14,8 @@ export function PeopleList() {
     <div>
       <div className="mb-6 flex items-end justify-between gap-4">
         <div>
-          <p className="text-ink-faint mb-1 text-sm">The people in your life</p>
-          <h1 className="font-display text-[2rem] leading-tight">People</h1>
+          <p className="eyebrow mb-1.5">The people in your life</p>
+          <h1 className="font-display text-display">People</h1>
         </div>
         <Button variant="soft" onClick={() => setAdding(true)}>
           <PlusIcon width={18} height={18} /> Add

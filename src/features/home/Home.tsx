@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Button, EmptyState, Page } from '@/components'
+import { Button, EmptyState, Page, ThreadBridge } from '@/components'
 import { PlusIcon } from '@/components/icons'
 import { useCapture } from '@/features/capture'
 import { MilestoneCard } from '@/features/occasions'
@@ -24,8 +24,8 @@ export function Home() {
   return (
     <Page>
       <header className="mb-8">
-        <p className="text-ink-faint mb-1 text-sm">{greeting()}</p>
-        <h1 className="font-display text-[2rem] leading-tight">
+        <p className="eyebrow mb-1.5">{greeting()}</p>
+        <h1 className="font-display text-display">
           {moments.length > 0 ? 'Here’s what you’ve been noticing' : 'A quiet stretch'}
         </h1>
       </header>
@@ -43,26 +43,29 @@ export function Home() {
         </EmptyState>
       )}
 
-      <div className="flex flex-col gap-5">
-        {moments.map((m) => (
-          <MomentCard key={m.occasion.id} moment={m} />
+      <div>
+        {moments.map((m, i) => (
+          <div key={m.occasion.id}>
+            <MomentCard moment={m} first={i === 0} />
+            <ThreadBridge />
+          </div>
         ))}
       </div>
+
+      <button
+        type="button"
+        onClick={() => openCapture()}
+        className="border-line-strong text-ink-soft hover:bg-sunken flex min-h-16 w-full items-center gap-4 rounded-lg border border-dashed pr-5 pl-[29px] text-left transition-colors"
+      >
+        <PlusIcon className="text-accent" />
+        <span className="font-display text-title">Noticed something lately?</span>
+      </button>
 
       {milestone && (
         <section className="mt-8" aria-label="A question">
           <MilestoneCard suggestion={milestone} />
         </section>
       )}
-
-      <button
-        type="button"
-        onClick={() => openCapture()}
-        className="border-line-strong text-ink-soft hover:bg-sunken mt-8 flex min-h-16 w-full items-center gap-3 rounded-lg border border-dashed px-5 text-left transition-colors"
-      >
-        <PlusIcon className="text-accent" />
-        <span className="font-display text-lg">Noticed something lately?</span>
-      </button>
 
       {people.length > 0 && (
         <p className="text-ink-faint mt-6 text-center text-sm">

@@ -24,7 +24,7 @@ function ThoughtCard({
 
   return (
     <div>
-      <p className="font-display text-[1.15rem] leading-relaxed">{thought.body}</p>
+      <p className="font-display text-quote">{thought.body}</p>
       <p className="text-ink-faint mt-1 text-sm">
         <time dateTime={thought.observedAt}>{agoPhrase(thought.observedAt)}</time>
         {occasion && <> · for {occasion.title}</>}
@@ -107,7 +107,10 @@ export function ThoughtStream({ thoughts, occasions, ideas }: Props) {
   return (
     <ThreadList>
       {thoughts.map((t) => (
-        <ThreadItem key={t.id} active={!!t.occasionId || !!t.giftIdeaId}>
+        <ThreadItem
+          key={t.id}
+          tied={!!t.occasionId || !!t.giftIdeaId || ideas.some((g) => g.sourceThoughtId === t.id)}
+        >
           <ThoughtCard thought={t} occasions={occasions} ideas={ideas} />
         </ThreadItem>
       ))}
