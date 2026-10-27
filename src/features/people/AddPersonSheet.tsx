@@ -31,7 +31,7 @@ export function AddPersonSheet({ open, onClose }: { open: boolean; onClose: () =
           {(p) => (
             <input
               {...p}
-              autoFocus
+              data-autofocus
               value={name}
               onChange={(e) => setName(e.target.value)}
               className={inputClass}

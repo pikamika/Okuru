@@ -315,7 +315,7 @@ function IdeaSheet({
           {(p) => (
             <input
               {...p}
-              autoFocus
+              data-autofocus
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className={inputClass}
@@ -368,7 +368,7 @@ function PastGiftSheet({
           {(p) => (
             <input
               {...p}
-              autoFocus
+              data-autofocus
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className={inputClass}

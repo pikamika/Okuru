@@ -9,7 +9,13 @@ export default tseslint.config(
   { ignores: ['dist', 'node_modules'] },
   {
     files: ['**/*.{ts,tsx}'],
-    extends: [js.configs.recommended, ...tseslint.configs.recommended, reactHooks.configs.flat.recommended, reactRefresh.configs.vite, prettier],
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+      prettier,
+    ],
     languageOptions: { ecmaVersion: 2023, globals: globals.browser },
   },
 )

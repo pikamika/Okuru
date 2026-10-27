@@ -79,7 +79,7 @@ function CaptureForm({ initialPersonId, onClose }: Omit<Props, 'open'>) {
           </label>
           <textarea
             id="capture-body"
-            autoFocus
+            data-autofocus
             rows={3}
             value={body}
             onChange={(e) => setBody(e.target.value)}

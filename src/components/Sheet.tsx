@@ -15,7 +15,11 @@ export function Sheet({ open, onClose, title, children }: Props) {
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    if (open && !el.open) el.showModal()
+    if (open && !el.open) {
+      el.showModal()
+      // <dialog> opens closed-then-shown, so React's autoFocus misses; focus explicitly.
+      el.querySelector<HTMLElement>('[data-autofocus]')?.focus()
+    }
     if (!open && el.open) el.close()
   }, [open])
 
