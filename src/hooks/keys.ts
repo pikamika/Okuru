@@ -1,0 +1,16 @@
+export const keys = {
+  people: ['people'] as const,
+  person: (id: string) => ['people', id] as const,
+  thoughts: ['thoughts'] as const,
+  thoughtsByPerson: (id: string) => ['thoughts', 'person', id] as const,
+  occasions: ['occasions'] as const,
+  occasionsByPerson: (id: string) => ['occasions', 'person', id] as const,
+  giftIdeas: ['giftIdeas'] as const,
+  giftIdeasByPerson: (id: string) => ['giftIdeas', 'person', id] as const,
+  giftProjects: ['giftProjects'] as const,
+  giftProjectsByPerson: (id: string) => ['giftProjects', 'person', id] as const,
+  giftProject: (id: string) => ['giftProjects', id] as const,
+  checklist: (projectId: string) => ['checklist', projectId] as const,
+  milestones: ['milestones'] as const,
+  onboarded: ['settings', 'onboarded'] as const,
+}

@@ -18,7 +18,7 @@ export interface Crud<T extends { id: Id }, N> {
   remove(id: Id): Promise<void>
 }
 
-export interface PeopleRepository extends Crud<Person, NewEntity<Person>> {}
+export type PeopleRepository = Crud<Person, NewEntity<Person>>
 
 export interface ThoughtsRepository extends Crud<Thought, NewEntity<Thought>> {
   /** Newest observation first. */
@@ -42,8 +42,10 @@ export interface ChecklistRepository extends Crud<ChecklistItem, NewEntity<Check
   listByProject(projectId: Id): Promise<ChecklistItem[]>
 }
 
-export interface MilestonesRepository
-  extends Crud<MilestoneSuggestion, NewEntity<MilestoneSuggestion>> {
+export interface MilestonesRepository extends Crud<
+  MilestoneSuggestion,
+  NewEntity<MilestoneSuggestion>
+> {
   listPending(): Promise<MilestoneSuggestion[]>
 }
 

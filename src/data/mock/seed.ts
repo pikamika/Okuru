@@ -87,12 +87,32 @@ export function buildSeed(): Db {
     'She keeps eyeing a running belt. Said her phone bounces around on long runs.',
     130,
   )
-  const priyaMed = t(priya, 'Started med school this autumn. Tired, but lit up when she talked about it.', 160)
-  const mumMug = t(mum, 'Picked up every mug at the market stall and put them all back. Loved the speckled one.', 75)
+  const priyaMed = t(
+    priya,
+    'Started med school this autumn. Tired, but lit up when she talked about it.',
+    160,
+  )
+  const mumMug = t(
+    mum,
+    'Picked up every mug at the market stall and put them all back. Loved the speckled one.',
+    75,
+  )
   const mumCard = t(mum, 'Kept my handwritten card from last year on the fridge. All year.', 210)
-  const mumGarden = t(mum, 'Mentioned her tomato plants are struggling in the shade this summer.', 30)
-  const danCoffee = t(daniel, 'Complaining his coffee at home never tastes like the café’s. Maybe a better grinder?', 18)
-  const hanaThought = t(hana, 'Brought over soup when I was sick. Never asked for anything back.', 45)
+  const mumGarden = t(
+    mum,
+    'Mentioned her tomato plants are struggling in the shade this summer.',
+    30,
+  )
+  const danCoffee = t(
+    daniel,
+    'Complaining his coffee at home never tastes like the café’s. Maybe a better grinder?',
+    18,
+  )
+  const hanaThought = t(
+    hana,
+    'Brought over soup when I was sick. Never asked for anything back.',
+    45,
+  )
 
   const thoughts = [priyaBelt, priyaMed, mumMug, mumCard, mumGarden, danCoffee, hanaThought]
 
