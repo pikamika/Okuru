@@ -5,6 +5,7 @@ import {
   Button,
   EmptyState,
   FormField,
+  RelationshipPicker,
   Section,
   Sheet,
   TagInput,
@@ -12,6 +13,7 @@ import {
   useToast,
 } from '@/components'
 import { PlusIcon } from '@/components/icons'
+import type { Person } from '@/types'
 import { AddOccasionSheet, MilestoneCard } from '@/features/occasions'
 import { useCapture } from '@/features/capture'
 import {
@@ -93,7 +95,9 @@ export function PersonProfile() {
         <Avatar name={person.name} size={64} />
         <div className="min-w-0 flex-1">
           <h1 className="font-display text-display">{person.name}</h1>
-          {person.relationship && <p className="text-ink-soft">{person.relationship}</p>}
+          {person.relationships.length > 0 && (
+            <p className="text-ink-soft">{person.relationships.join(' · ')}</p>
+          )}
         </div>
       </header>
 
@@ -111,6 +115,10 @@ export function PersonProfile() {
           ))}
         </div>
       )}
+
+      <Section title="About">
+        <AboutPerson key={person.id} person={person} />
+      </Section>
 
       <Section title="Good to know">
         <TagInput
@@ -403,5 +411,37 @@ function PastGiftSheet({
         </Button>
       </form>
     </Sheet>
+  )
+}
+
+function AboutPerson({ person }: { person: Person }) {
+  const update = useUpdatePerson()
+  const [notes, setNotes] = useState(person.notes ?? '')
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-1.5">
+        <p className="text-ink-soft text-sm font-medium">Who they are to you</p>
+        <RelationshipPicker
+          value={person.relationships}
+          onChange={(relationships) => update.mutate({ id: person.id, patch: { relationships } })}
+        />
+      </div>
+      <FormField label="Notes">
+        {(p) => (
+          <textarea
+            {...p}
+            rows={3}
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            onBlur={() =>
+              notes.trim() !== (person.notes ?? '') &&
+              update.mutate({ id: person.id, patch: { notes: notes.trim() || undefined } })
+            }
+            placeholder="Anything specific about who they are to you"
+            className={inputClass}
+          />
+        )}
+      </FormField>
+    </div>
   )
 }

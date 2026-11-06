@@ -12,7 +12,7 @@ function load(): Db {
   try {
     const raw = localStorage.getItem(KEY)
     if (raw) {
-      cache = JSON.parse(raw) as Db
+      cache = migrate(JSON.parse(raw) as Db)
       return cache
     }
   } catch {
@@ -21,6 +21,17 @@ function load(): Db {
   cache = buildSeed()
   persist()
   return cache
+}
+
+/** Older saved data had a single `relationship` string; it is now a list. */
+function migrate(data: Db): Db {
+  data.people = data.people.map((p) => {
+    const legacy = p as typeof p & { relationship?: string }
+    if (Array.isArray(p.relationships)) return p
+    const { relationship, ...rest } = legacy
+    return { ...rest, relationships: relationship ? [relationship] : [] }
+  })
+  return data
 }
 
 function persist() {

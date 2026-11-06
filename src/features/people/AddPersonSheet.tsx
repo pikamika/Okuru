@@ -1,11 +1,12 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, FormField, Sheet, inputClass, useToast } from '@/components'
+import { Button, FormField, RelationshipPicker, Sheet, inputClass, useToast } from '@/components'
 import { useCreatePerson } from '@/hooks'
 
 export function AddPersonSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [name, setName] = useState('')
-  const [relationship, setRelationship] = useState('')
+  const [relationships, setRelationships] = useState<string[]>([])
+  const [notes, setNotes] = useState('')
   const create = useCreatePerson()
   const navigate = useNavigate()
   const toast = useToast()
@@ -15,10 +16,12 @@ export function AddPersonSheet({ open, onClose }: { open: boolean; onClose: () =
     if (!name.trim()) return
     const person = await create.mutateAsync({
       name: name.trim(),
-      relationship: relationship.trim() || undefined,
+      relationships,
+      notes: notes.trim() || undefined,
     })
     setName('')
-    setRelationship('')
+    setRelationships([])
+    setNotes('')
     toast(`${person.name} has a notebook now.`)
     onClose()
     navigate(`/people/${person.id}`)
@@ -38,13 +41,20 @@ export function AddPersonSheet({ open, onClose }: { open: boolean; onClose: () =
             />
           )}
         </FormField>
-        <FormField label="Who are they to you? (optional)">
+        <div className="flex flex-col gap-1.5">
+          <p className="text-ink-soft text-sm font-medium">
+            Who are they to you? (pick any that fit)
+          </p>
+          <RelationshipPicker value={relationships} onChange={setRelationships} />
+        </div>
+        <FormField label="Notes (optional)" hint="Anything specific about who they are to you.">
           {(p) => (
-            <input
+            <textarea
               {...p}
-              value={relationship}
-              onChange={(e) => setRelationship(e.target.value)}
-              placeholder="sister, old friend, neighbour…"
+              rows={3}
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Met at university. Always remembers my birthday."
               className={inputClass}
             />
           )}

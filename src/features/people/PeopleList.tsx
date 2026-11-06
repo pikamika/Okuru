@@ -43,8 +43,10 @@ export function PeopleList() {
               <Avatar name={p.name} size={48} />
               <span className="min-w-0">
                 <span className="font-display block text-lg leading-snug">{p.name}</span>
-                {p.relationship && (
-                  <span className="text-ink-soft block truncate text-sm">{p.relationship}</span>
+                {p.relationships.length > 0 && (
+                  <span className="text-ink-soft block truncate text-sm">
+                    {p.relationships.join(' · ')}
+                  </span>
                 )}
               </span>
             </NavLink>

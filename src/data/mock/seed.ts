@@ -38,7 +38,7 @@ export function buildSeed(): Db {
       ...base,
       id: priya,
       name: 'Priya',
-      relationship: 'Close friend',
+      relationships: ['Close friend'],
       tags: [
         { kind: 'interest', label: 'running' },
         { kind: 'interest', label: 'medicine' },
@@ -49,7 +49,8 @@ export function buildSeed(): Db {
       ...base,
       id: mum,
       name: 'Mum',
-      relationship: 'Mother',
+      relationships: ['Family'],
+      notes: 'My mum. Prefers a handwritten card to anything shop-bought.',
       tags: [
         { kind: 'interest', label: 'gardening' },
         { kind: 'interest', label: 'ceramics' },
@@ -60,10 +61,10 @@ export function buildSeed(): Db {
       ...base,
       id: daniel,
       name: 'Daniel',
-      relationship: 'Brother',
+      relationships: ['Family'],
       tags: [{ kind: 'interest', label: 'coffee' }],
     },
-    { ...base, id: hana, name: 'Hana', relationship: 'Neighbour', tags: [] },
+    { ...base, id: hana, name: 'Hana', relationships: ['Neighbour', 'Friend'], tags: [] },
   ]
 
   const t = (

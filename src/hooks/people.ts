@@ -20,7 +20,7 @@ export function useCreatePerson() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (input: Pick<Person, 'name'> & Partial<NewEntity<Person>>) =>
-      r.people.create({ tags: [], ...input }),
+      r.people.create({ tags: [], relationships: [], ...input }),
     onSuccess: () => qc.invalidateQueries({ queryKey: keys.people }),
   })
 }

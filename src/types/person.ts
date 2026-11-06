@@ -10,7 +10,9 @@ export interface PersonTag {
 
 export interface Person extends Entity {
   name: string
-  /** Free text: "sister", "college friend". */
-  relationship?: string
+  /** Several can be true at once: ["Family", "Close friend"]. Presets or free text. */
+  relationships: string[]
+  /** Anything specific worth remembering about who they are to you. */
+  notes?: string
   tags: PersonTag[]
 }
