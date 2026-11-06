@@ -1,4 +1,5 @@
 export * from './common'
+export * from './connection'
 export * from './gift'
 export * from './milestone'
 export * from './occasion'

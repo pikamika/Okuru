@@ -12,5 +12,7 @@ export const keys = {
   giftProject: (id: string) => ['giftProjects', id] as const,
   checklist: (projectId: string) => ['checklist', projectId] as const,
   milestones: ['milestones'] as const,
+  connections: ['connections'] as const,
+  connectionsByPerson: (id: string) => ['connections', 'person', id] as const,
   onboarded: ['settings', 'onboarded'] as const,
 }

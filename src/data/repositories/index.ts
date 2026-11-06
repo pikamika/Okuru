@@ -1,5 +1,6 @@
 import type {
   ChecklistItem,
+  Connection,
   GiftIdea,
   GiftProject,
   Id,
@@ -49,6 +50,11 @@ export interface MilestonesRepository extends Crud<
   listPending(): Promise<MilestoneSuggestion[]>
 }
 
+export interface ConnectionsRepository extends Crud<Connection, NewEntity<Connection>> {
+  /** Connections where this person is either side. */
+  listByPerson(personId: Id): Promise<Connection[]>
+}
+
 export interface SettingsRepository {
   getOnboarded(): Promise<boolean>
   setOnboarded(value: boolean): Promise<void>
@@ -62,5 +68,6 @@ export interface Repositories {
   giftProjects: GiftProjectsRepository
   checklist: ChecklistRepository
   milestones: MilestonesRepository
+  connections: ConnectionsRepository
   settings: SettingsRepository
 }

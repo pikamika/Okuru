@@ -31,6 +31,7 @@ function migrate(data: Db): Db {
     const { relationship, ...rest } = legacy
     return { ...rest, relationships: relationship ? [relationship] : [] }
   })
+  data.connections ??= []
   return data
 }
 

@@ -48,7 +48,7 @@ component → hook (TanStack Query) → repositories (interface) → mock impl �
 ## Plugging in Supabase
 
 1. `npm i @supabase/supabase-js` and add `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` to `.env.local`.
-2. Create tables matching `src/types/` (`people`, `thoughts`, `occasions`, `gift_ideas`, `gift_projects`, `checklist_items`, `milestone_suggestions`). Use `uuid` primary keys, `timestamptz` for `created_at`/`updated_at`, and `date` for occasion dates. Person tags can be a `jsonb` column. Add a `user_id` and row-level security on each table.
+2. Create tables matching `src/types/` (`people`, `thoughts`, `occasions`, `gift_ideas`, `gift_projects`, `checklist_items`, `milestone_suggestions`, `connections`). Use `uuid` primary keys, `timestamptz` for `created_at`/`updated_at`, and `date` for occasion dates. Person tags and relationships can be `jsonb` columns. A connection is one row per pair (`person_id`, and either `other_person_id` or `other_name`), shown on both profiles. Add a `user_id` and row-level security on each table.
 3. Add `src/data/supabase/repositories.ts` exporting `createSupabaseRepositories(): Repositories`, implementing every interface in `src/data/repositories/index.ts` (map snake_case columns to camelCase).
 4. In `src/data/index.ts`, change one line:
    ```ts

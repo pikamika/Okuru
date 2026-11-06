@@ -17,6 +17,7 @@ import type { Person } from '@/types'
 import { AddOccasionSheet, MilestoneCard } from '@/features/occasions'
 import { useCapture } from '@/features/capture'
 import {
+  useConnectionsByPerson,
   useCreateGiftIdea,
   useCreateGiftProject,
   useDeleteGiftIdea,
@@ -24,6 +25,7 @@ import {
   useGiftIdeasByPerson,
   useGiftProjectsByPerson,
   useOccasionsByPerson,
+  usePeople,
   usePendingMilestones,
   usePerson,
   useStartGiftProject,
@@ -46,6 +48,8 @@ export function PersonProfile() {
   const { data: ideas = [] } = useGiftIdeasByPerson(personId)
   const { data: projects = [] } = useGiftProjectsByPerson(personId)
   const { data: milestones = [] } = usePendingMilestones()
+  const { data: connections = [] } = useConnectionsByPerson(personId)
+  const { data: everyone = [] } = usePeople()
 
   const updatePerson = useUpdatePerson()
   const removeOccasion = useDeleteOccasion()
@@ -118,6 +122,37 @@ export function PersonProfile() {
 
       <Section title="About">
         <AboutPerson key={person.id} person={person} />
+      </Section>
+
+      <Section
+        title="Connections"
+        action={
+          <Link
+            to={`/people/${person.id}/connections`}
+            className="text-accent-strong hover:bg-accent-soft inline-flex min-h-11 items-center rounded-full px-4 text-[0.95rem]"
+          >
+            {connections.length > 0 ? 'Open' : 'Add'}
+          </Link>
+        }
+      >
+        {connections.length === 0 ? (
+          <p className="text-ink-soft">
+            Siblings, friends from the same circle, who {person.name} knows.
+          </p>
+        ) : (
+          <ul className="flex flex-wrap gap-2">
+            {connections.map((c) => {
+              const otherId = c.personId === person.id ? c.otherPersonId : c.personId
+              const name = everyone.find((p) => p.id === otherId)?.name ?? c.otherName ?? 'Someone'
+              return (
+                <li key={c.id} className="bg-sunken rounded-full px-3 py-1 text-sm">
+                  {name}
+                  {c.label && <span className="text-ink-faint"> · {c.label}</span>}
+                </li>
+              )
+            })}
+          </ul>
+        )}
       </Section>
 
       <Section title="Good to know">
@@ -414,6 +449,25 @@ function PastGiftSheet({
   )
 }
 
+const MBTI_TYPES = [
+  'INTJ',
+  'INTP',
+  'ENTJ',
+  'ENTP',
+  'INFJ',
+  'INFP',
+  'ENFJ',
+  'ENFP',
+  'ISTJ',
+  'ISFJ',
+  'ESTJ',
+  'ESFJ',
+  'ISTP',
+  'ISFP',
+  'ESTP',
+  'ESFP',
+]
+
 function AboutPerson({ person }: { person: Person }) {
   const update = useUpdatePerson()
   const [notes, setNotes] = useState(person.notes ?? '')
@@ -426,6 +480,25 @@ function AboutPerson({ person }: { person: Person }) {
           onChange={(relationships) => update.mutate({ id: person.id, patch: { relationships } })}
         />
       </div>
+      <FormField label="Personality type (optional)" hint="MBTI, if you know it. Only ever a hint.">
+        {(p) => (
+          <select
+            {...p}
+            value={person.mbti ?? ''}
+            onChange={(e) =>
+              update.mutate({ id: person.id, patch: { mbti: e.target.value || undefined } })
+            }
+            className={inputClass}
+          >
+            <option value="">Not sure</option>
+            {MBTI_TYPES.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+        )}
+      </FormField>
       <FormField label="Notes">
         {(p) => (
           <textarea

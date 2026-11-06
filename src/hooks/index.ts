@@ -1,3 +1,4 @@
+export * from './connections'
 export * from './gifts'
 export * from './milestones'
 export * from './moments'

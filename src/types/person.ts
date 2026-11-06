@@ -14,5 +14,7 @@ export interface Person extends Entity {
   relationships: string[]
   /** Anything specific worth remembering about who they are to you. */
   notes?: string
+  /** Four letters, e.g. "INFJ". Optional, and only ever a hint. */
+  mbti?: string
   tags: PersonTag[]
 }

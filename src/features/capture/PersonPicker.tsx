@@ -9,10 +9,18 @@ interface Props {
   people: Person[]
   value: PersonChoice
   onChange: (choice: PersonChoice) => void
+  label?: string
+  addLabel?: (name: string) => string
 }
 
 /** Pick someone, or type to search. A name that isn't in the list can be added on the spot. */
-export function PersonPicker({ people, value, onChange }: Props) {
+export function PersonPicker({
+  people,
+  value,
+  onChange,
+  label = 'Who is this about?',
+  addLabel = (name) => `Add “${name}”`,
+}: Props) {
   const [query, setQuery] = useState('')
   const id = useId()
   const q = query.trim()
@@ -30,7 +38,7 @@ export function PersonPicker({ people, value, onChange }: Props) {
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor={id} className="text-ink-soft text-sm font-medium">
-        Who is this about?
+        {label}
       </label>
       <input
         id={id}
@@ -62,7 +70,7 @@ export function PersonPicker({ people, value, onChange }: Props) {
             onClick={() => onChange({ kind: 'new', name: q })}
             className={pill(value?.kind === 'new' && value.name === q)}
           >
-            Add “{q}”
+            {addLabel(q)}
           </button>
         )}
       </div>

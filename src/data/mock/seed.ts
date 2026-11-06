@@ -1,5 +1,6 @@
 import type {
   ChecklistItem,
+  Connection,
   GiftIdea,
   GiftProject,
   MilestoneSuggestion,
@@ -17,6 +18,7 @@ export interface Db {
   giftProjects: GiftProject[]
   checklist: ChecklistItem[]
   milestones: MilestoneSuggestion[]
+  connections: Connection[]
   settings: { onboarded: boolean }
 }
 
@@ -177,6 +179,25 @@ export function buildSeed(): Db {
     },
   ]
 
+  const connections: Connection[] = [
+    {
+      ...base,
+      id: newId(),
+      personId: priya,
+      otherPersonId: daniel,
+      label: 'Same friend group',
+      note: 'Met through the uni running club. They still do a Sunday jog.',
+    },
+    {
+      ...base,
+      id: newId(),
+      personId: mum,
+      otherName: 'Rekha',
+      label: 'Sibling',
+      note: 'Her sister. They talk every Sunday.',
+    },
+  ]
+
   return {
     people,
     thoughts,
@@ -185,6 +206,7 @@ export function buildSeed(): Db {
     giftProjects: [pastGift],
     checklist: [],
     milestones,
+    connections,
     settings: { onboarded: false },
   }
 }

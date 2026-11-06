@@ -1,6 +1,7 @@
 import type { Repositories } from '../repositories'
 import type {
   ChecklistItem,
+  Connection,
   GiftIdea,
   GiftProject,
   MilestoneSuggestion,
@@ -21,6 +22,7 @@ export function createMockRepositories(): Repositories {
   const giftProjects = createCollection<GiftProject>('giftProjects')
   const checklist = createCollection<ChecklistItem>('checklist')
   const milestones = createCollection<MilestoneSuggestion>('milestones')
+  const connections = createCollection<Connection>('connections')
 
   return {
     people,
@@ -63,6 +65,14 @@ export function createMockRepositories(): Repositories {
       ...milestones,
       async listPending() {
         return (await milestones.list()).filter((m) => m.status === 'pending')
+      },
+    },
+    connections: {
+      ...connections,
+      async listByPerson(personId) {
+        return (await connections.list()).filter(
+          (c) => c.personId === personId || c.otherPersonId === personId,
+        )
       },
     },
     settings: {

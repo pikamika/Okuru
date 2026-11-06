@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { ConnectionsPage } from '@/features/connections'
 import { GiftProjectPage } from '@/features/gift-project'
 import { Home } from '@/features/home'
 import { Onboarding } from '@/features/onboarding'
@@ -18,6 +19,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <PeopleIndexPane /> },
           { path: ':personId', element: <PersonProfile /> },
+          { path: ':personId/connections', element: <ConnectionsPage /> },
         ],
       },
       { path: 'gifts/:projectId', element: <GiftProjectPage /> },
