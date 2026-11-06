@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import { LogoMark } from '@/components/LogoMark'
 import { HomeIcon, PeopleIcon, PlusIcon } from '@/components/icons'
 import { useAuth } from '@/features/auth'
 import { useCapture } from '@/features/capture'
@@ -13,15 +14,7 @@ const links = [
 function Wordmark() {
   return (
     <div className="font-display flex items-center gap-2 text-2xl">
-      <svg aria-hidden viewBox="0 0 32 20" className="text-accent w-7" fill="none">
-        <path
-          d="M2 14C10 -2 18 22 30 6"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-        <circle cx="30" cy="6" r="2.4" fill="currentColor" />
-      </svg>
+      <LogoMark className="text-accent size-9" />
       Okuru
     </div>
   )

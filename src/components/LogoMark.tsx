@@ -1,0 +1,12 @@
+import type { SVGProps } from 'react'
+
+/**
+ * The top of 曽 (the right-hand half of 贈, "okuru"): the ticks and the box that read as a
+ * wrapped gift. Outline taken from Noto Serif JP Bold (SIL Open Font License), cut to the top.
+ * Takes its colour from the text colour.
+ */
+export const LogoMark = (p: SVGProps<SVGSVGElement>) => (
+  <svg aria-hidden viewBox="0 0 64 64" fill="currentColor" {...p}>
+    <path d="M26.71 25.84H34.26V44.74H26.71ZM15.18 14.8Q19.54 15.28 22.03 16.54Q24.53 17.81 25.52 19.38Q26.51 20.95 26.34 22.44Q26.18 23.93 25.2 24.92Q24.21 25.9 22.69 26.02Q21.17 26.13 19.49 24.91Q19.24 23.17 18.49 21.39Q17.75 19.62 16.74 18Q15.73 16.37 14.65 15.17ZM9.15 34.77H51.73V36.66H9.15ZM9.15 43.97H51.73V45.86H9.15ZM47.65 25.75H46.98L50.51 21.85L58 27.51Q57.72 27.9 57.02 28.29Q56.32 28.68 55.28 28.93V46.86Q55.28 47.09 54.2 47.53Q53.12 47.98 51.64 48.32Q50.16 48.66 48.91 48.66H47.65ZM6 25.75V22.55L14.13 25.75H51.84V27.64H13.54V46.9Q13.54 47.28 12.58 47.86Q11.61 48.43 10.14 48.87Q8.67 49.31 7.11 49.31H6ZM38.74 14.69 48.88 17.33Q48.52 18.66 46.4 18.64Q44.55 20.49 42.01 22.73Q39.47 24.97 36.83 26.74H34.83Q35.58 25.04 36.29 22.9Q37 20.77 37.65 18.6Q38.31 16.44 38.74 14.69Z" />
+  </svg>
+)
