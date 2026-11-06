@@ -1,15 +1,16 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, FormField, inputClass } from '@/components'
+import { Button, FormField, RelationshipPicker, inputClass } from '@/components'
 import { useCreateOccasion, useCreatePerson, useCreateThought, useSetOnboarded } from '@/hooks'
 
 interface Draft {
   name: string
+  relationships: string[]
   memories: string
   birthday: string
 }
 
-const empty = (): Draft => ({ name: '', memories: '', birthday: '' })
+const empty = (): Draft => ({ name: '', relationships: [], memories: '', birthday: '' })
 
 export function Onboarding() {
   const [step, setStep] = useState<'hello' | 'people'>('hello')
@@ -28,7 +29,10 @@ export function Onboarding() {
     setSaving(true)
     if (!skip) {
       for (const d of filled) {
-        const person = await createPerson.mutateAsync({ name: d.name.trim() })
+        const person = await createPerson.mutateAsync({
+          name: d.name.trim(),
+          relationships: d.relationships,
+        })
         const lines = d.memories
           .split('\n')
           .map((l) => l.trim())
@@ -103,6 +107,15 @@ export function Onboarding() {
                         />
                       )}
                     </FormField>
+                    <div>
+                      <p className="text-ink-soft mb-1.5 text-sm font-medium">
+                        Who are they to you? (pick any that fit)
+                      </p>
+                      <RelationshipPicker
+                        value={d.relationships}
+                        onChange={(relationships) => set(i, { relationships })}
+                      />
+                    </div>
                     <FormField label="What do you remember?">
                       {(p) => (
                         <textarea
