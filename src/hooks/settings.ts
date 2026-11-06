@@ -9,6 +9,6 @@ export function useSetOnboarded() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (value: boolean) => r.settings.setOnboarded(value),
-    onSuccess: () => qc.invalidateQueries({ queryKey: keys.onboarded }),
+    onSuccess: (_, value) => qc.setQueryData(keys.onboarded, value),
   })
 }

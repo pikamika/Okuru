@@ -2,7 +2,7 @@
 
 _Make thoughtfulness tangible._ A mobile-first notebook for the people you care about. You jot down what you notice, and it resurfaces when a relevant moment approaches.
 
-This is the **front end only**. There is no back end, auth, payments, or real AI. The gift-brainstorm chat runs on a scripted stand-in. All data lives in `localStorage` behind a repository seam so Supabase can replace it later.
+This is the **front end only**. There are no payments or real AI, and the gift-brainstorm chat runs on a scripted stand-in. Data lives in Supabase when it is configured, and in `localStorage` mock data when it is not. All data lives in `localStorage` behind a repository seam so Supabase can replace it later.
 
 ## Run it
 
@@ -67,3 +67,13 @@ The Finishing Touch (wrapping tutorials), DIY templates, personalized recommenda
 "Think of a gift together" opens a chat (`src/features/brainstorm`). It calls `agent.brainstorm(context, history, text)` from `src/data/index.ts`, typed by `AgentService` in `src/data/agent/index.ts`. Today that is `src/data/agent/mock.ts`, which is scripted and only reads the person's notes, interests, MBTI and connections.
 
 To make it real, add an endpoint (for example a Vercel function or Supabase Edge Function) that holds the model API key, sends the same context and history to the model, and returns `{ text, suggestions }`. Then point `agent` at a client that calls it. Never call a model directly from the browser, since the key would be public.
+
+## Supabase
+
+The data layer picks its implementation in `src/data/index.ts`. With both env vars set it uses Supabase (`src/data/supabase/`) and requires email + password sign-in; with neither set it uses local mock data and no sign-in.
+
+```
+cp .env.example .env.local   # then fill in the project URL and publishable key
+```
+
+The schema (tables, owner-only row-level security, `updated_at` triggers) was applied as the `initial_schema` migration. Every table has a `user_id` that defaults to `auth.uid()`, and one policy lets a signed-in user touch only their own rows. On Vercel, add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` under Settings → Environment Variables, then redeploy.

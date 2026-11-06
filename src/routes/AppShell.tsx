@@ -1,6 +1,8 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { HomeIcon, PeopleIcon, PlusIcon } from '@/components/icons'
+import { useAuth } from '@/features/auth'
 import { useCapture } from '@/features/capture'
+import { isSupabaseConfigured } from '@/data/supabase/client'
 import { cn } from '@/lib/cn'
 
 const links = [
@@ -27,6 +29,7 @@ function Wordmark() {
 
 export function AppShell() {
   const { openCapture } = useCapture()
+  const { session, signOut } = useAuth()
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     cn(
@@ -62,6 +65,18 @@ export function AppShell() {
         >
           <PlusIcon /> Note something
         </button>
+        {isSupabaseConfigured && session && (
+          <div className="px-2">
+            <p className="text-ink-faint truncate text-xs">{session.user.email}</p>
+            <button
+              type="button"
+              onClick={() => void signOut()}
+              className="text-ink-soft hover:text-ink min-h-11 text-sm underline underline-offset-4"
+            >
+              Sign out
+            </button>
+          </div>
+        )}
       </aside>
 
       <main

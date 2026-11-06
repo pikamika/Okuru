@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { Button, EmptyState, Page, ThreadBridge } from '@/components'
 import { PlusIcon } from '@/components/icons'
+import { isSupabaseConfigured } from '@/data/supabase/client'
+import { useAuth } from '@/features/auth'
 import { useCapture } from '@/features/capture'
 import { MilestoneCard } from '@/features/occasions'
 import { useMoments, usePendingMilestones, usePeople } from '@/hooks'
@@ -19,6 +21,7 @@ export function Home() {
   const { data: people = [] } = usePeople()
   const { data: milestones = [] } = usePendingMilestones()
   const { openCapture } = useCapture()
+  const { session, signOut } = useAuth()
   const milestone = milestones[0]
 
   return (
@@ -75,6 +78,17 @@ export function Home() {
           >
             Browse everyone in your notebook
           </Link>
+        </p>
+      )}
+      {isSupabaseConfigured && session && (
+        <p className="text-ink-faint mt-2 text-center text-sm md:hidden">
+          <button
+            type="button"
+            onClick={() => void signOut()}
+            className="decoration-line-strong hover:text-ink min-h-11 underline underline-offset-4"
+          >
+            Sign out
+          </button>
         </p>
       )}
     </Page>

@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { RequireAuth, SignInPage } from '@/features/auth'
 import { BrainstormPage } from '@/features/brainstorm'
 import { ConnectionsPage } from '@/features/connections'
 import { GiftProjectPage } from '@/features/gift-project'
@@ -9,23 +10,29 @@ import { PersonProfile } from '@/features/profile'
 import { RequireOnboarding } from './RequireOnboarding'
 
 export const router = createBrowserRouter([
-  { path: '/welcome', element: <Onboarding /> },
+  { path: '/login', element: <SignInPage /> },
   {
-    element: <RequireOnboarding />,
+    element: <RequireAuth />,
     children: [
-      { index: true, element: <Home /> },
+      { path: '/welcome', element: <Onboarding /> },
       {
-        path: 'people',
-        element: <PeopleLayout />,
+        element: <RequireOnboarding />,
         children: [
-          { index: true, element: <PeopleIndexPane /> },
-          { path: ':personId', element: <PersonProfile /> },
-          { path: ':personId/connections', element: <ConnectionsPage /> },
+          { index: true, element: <Home /> },
+          {
+            path: 'people',
+            element: <PeopleLayout />,
+            children: [
+              { index: true, element: <PeopleIndexPane /> },
+              { path: ':personId', element: <PersonProfile /> },
+              { path: ':personId/connections', element: <ConnectionsPage /> },
+            ],
+          },
+          { path: 'gifts/:projectId', element: <GiftProjectPage /> },
+          { path: 'gifts/:projectId/brainstorm', element: <BrainstormPage /> },
+          { path: '*', element: <Navigate to="/" replace /> },
         ],
       },
-      { path: 'gifts/:projectId', element: <GiftProjectPage /> },
-      { path: 'gifts/:projectId/brainstorm', element: <BrainstormPage /> },
-      { path: '*', element: <Navigate to="/" replace /> },
     ],
   },
 ])
