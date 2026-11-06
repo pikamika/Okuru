@@ -1,16 +1,15 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, FormField, RelationshipPicker, inputClass } from '@/components'
-import { useCreateOccasion, useCreatePerson, useCreateThought, useSetOnboarded } from '@/hooks'
+import { useCreateOccasion, useCreatePerson, useSetOnboarded } from '@/hooks'
 
 interface Draft {
   name: string
   relationships: string[]
-  memories: string
   birthday: string
 }
 
-const empty = (): Draft => ({ name: '', relationships: [], memories: '', birthday: '' })
+const empty = (): Draft => ({ name: '', relationships: [], birthday: '' })
 
 export function Onboarding() {
   const [step, setStep] = useState<'hello' | 'people'>('hello')
@@ -19,7 +18,6 @@ export function Onboarding() {
 
   const navigate = useNavigate()
   const createPerson = useCreatePerson()
-  const createThought = useCreateThought()
   const createOccasion = useCreateOccasion()
   const setOnboarded = useSetOnboarded()
 
@@ -33,11 +31,6 @@ export function Onboarding() {
           name: d.name.trim(),
           relationships: d.relationships,
         })
-        const lines = d.memories
-          .split('\n')
-          .map((l) => l.trim())
-          .filter(Boolean)
-        for (const body of lines) await createThought.mutateAsync({ personId: person.id, body })
         if (d.birthday) {
           await createOccasion.mutateAsync({
             personId: person.id,
@@ -88,8 +81,7 @@ export function Onboarding() {
             <p className="eyebrow mb-1.5">Two or three is plenty</p>
             <h1 className="font-display text-display">Who’s on your mind?</h1>
             <p className="text-ink-soft mt-2">
-              Add a name and whatever you already remember about them. One thought per line. Rough
-              is fine.
+              Just a name and who they are to you. You can add the little things you notice later.
             </p>
 
             <div className="mt-8 flex flex-col gap-6">
@@ -116,20 +108,6 @@ export function Onboarding() {
                         onChange={(relationships) => set(i, { relationships })}
                       />
                     </div>
-                    <FormField label="What do you remember?">
-                      {(p) => (
-                        <textarea
-                          {...p}
-                          rows={3}
-                          value={d.memories}
-                          onChange={(e) => set(i, { memories: e.target.value })}
-                          placeholder={
-                            'Loves the speckled mugs at the market\nAlways cold at the cinema'
-                          }
-                          className={inputClass}
-                        />
-                      )}
-                    </FormField>
                     <FormField label="Their birthday (optional)" hint="The year doesn’t matter.">
                       {(p) => (
                         <input

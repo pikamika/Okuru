@@ -2,15 +2,58 @@ import { useId, useState, type KeyboardEvent } from 'react'
 import { cn } from '@/lib/cn'
 import { inputClass } from './FormField'
 
-const RELATIONSHIP_PRESETS = [
-  'Family',
-  'Partner',
-  'Close friend',
-  'Friend',
-  'Colleague',
-  'Neighbour',
-  'Mentor',
+interface Group {
+  label: string
+  /** Shown once the group is picked, to say more about it. */
+  more?: { prompt: string; options: string[] }
+}
+
+/** Most entries are friends, so Friend comes first. */
+const GROUPS: Group[] = [
+  {
+    label: 'Friend',
+    more: {
+      prompt: 'What kind of friend?',
+      options: [
+        'Close friend',
+        'Childhood friend',
+        'High school friend',
+        'College friend',
+        'Work friend',
+        'Through a friend',
+      ],
+    },
+  },
+  {
+    label: 'Family',
+    more: {
+      prompt: 'Which family?',
+      options: [
+        'Mother',
+        'Father',
+        'Sister',
+        'Brother',
+        'Grandparent',
+        'Aunt',
+        'Uncle',
+        'Cousin',
+        'In-law',
+      ],
+    },
+  },
+  { label: 'Partner' },
+  {
+    label: 'Colleague',
+    more: {
+      prompt: 'What kind of colleague?',
+      options: ['Manager', 'Teammate', 'Former colleague'],
+    },
+  },
+  { label: 'Neighbour' },
+  { label: 'Mentor' },
 ]
+
+const KNOWN = new Set(GROUPS.flatMap((g) => [g.label, ...(g.more?.options ?? [])]))
 
 interface Props {
   value: string[]
@@ -21,19 +64,25 @@ interface Props {
 export function RelationshipPicker({ value, onChange }: Props) {
   const [custom, setCustom] = useState('')
   const id = useId()
-  const options = [
-    ...RELATIONSHIP_PRESETS,
-    ...value.filter((v) => !RELATIONSHIP_PRESETS.includes(v)),
-  ]
+  // Anything typed in, or saved before these groups existed, shows as its own pill.
+  const extras = value.filter((v) => !KNOWN.has(v))
+  const options = [...GROUPS.map((g) => g.label), ...extras]
 
   const toggle = (label: string) =>
     onChange(value.includes(label) ? value.filter((v) => v !== label) : [...value, label])
+
+  /** Turning a group off also drops the details chosen under it. */
+  const toggleGroup = (group: Group) => {
+    if (!value.includes(group.label)) return onChange([...value, group.label])
+    const details = group.more?.options ?? []
+    onChange(value.filter((v) => v !== group.label && !details.includes(v)))
+  }
 
   const addCustom = () => {
     const label = custom.trim()
     setCustom('')
     if (!label) return
-    const existing = options.find((o) => o.toLowerCase() === label.toLowerCase())
+    const existing = [...KNOWN, ...extras].find((o) => o.toLowerCase() === label.toLowerCase())
     const name = existing ?? label
     if (!value.includes(name)) onChange([...value, name])
   }
@@ -54,7 +103,10 @@ export function RelationshipPicker({ value, onChange }: Props) {
               key={o}
               type="button"
               aria-pressed={on}
-              onClick={() => toggle(o)}
+              onClick={() => {
+                const group = GROUPS.find((g) => g.label === o)
+                return group ? toggleGroup(group) : toggle(o)
+              }}
               className={cn(
                 'min-h-11 rounded-full border px-4 text-[0.95rem] transition-colors',
                 on
@@ -67,6 +119,32 @@ export function RelationshipPicker({ value, onChange }: Props) {
           )
         })}
       </div>
+      {GROUPS.filter((g) => g.more && value.includes(g.label)).map((g) => (
+        <div key={g.label} className="anim-fade border-line-strong ml-3 border-l-2 pl-4">
+          <p className="text-ink-soft mb-2 text-sm">{g.more?.prompt} (optional)</p>
+          <div role="group" aria-label={g.more?.prompt} className="flex flex-wrap gap-2">
+            {g.more?.options.map((o) => {
+              const on = value.includes(o)
+              return (
+                <button
+                  key={o}
+                  type="button"
+                  aria-pressed={on}
+                  onClick={() => toggle(o)}
+                  className={cn(
+                    'min-h-11 rounded-full border px-3.5 text-sm transition-colors',
+                    on
+                      ? 'border-accent bg-accent-soft text-accent-strong'
+                      : 'border-line bg-card text-ink-soft hover:bg-sunken',
+                  )}
+                >
+                  {o}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      ))}
       <div>
         <label htmlFor={id} className="sr-only">
           Add your own
