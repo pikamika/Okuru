@@ -1,4 +1,5 @@
 import type {
+  BrainstormMessage,
   ChecklistItem,
   Connection,
   GiftIdea,
@@ -55,6 +56,14 @@ export interface ConnectionsRepository extends Crud<Connection, NewEntity<Connec
   listByPerson(personId: Id): Promise<Connection[]>
 }
 
+export interface BrainstormRepository extends Crud<
+  BrainstormMessage,
+  NewEntity<BrainstormMessage>
+> {
+  /** Oldest first. */
+  listByProject(projectId: Id): Promise<BrainstormMessage[]>
+}
+
 export interface SettingsRepository {
   getOnboarded(): Promise<boolean>
   setOnboarded(value: boolean): Promise<void>
@@ -69,5 +78,6 @@ export interface Repositories {
   checklist: ChecklistRepository
   milestones: MilestonesRepository
   connections: ConnectionsRepository
+  brainstorm: BrainstormRepository
   settings: SettingsRepository
 }

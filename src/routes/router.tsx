@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { BrainstormPage } from '@/features/brainstorm'
 import { ConnectionsPage } from '@/features/connections'
 import { GiftProjectPage } from '@/features/gift-project'
 import { Home } from '@/features/home'
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
         ],
       },
       { path: 'gifts/:projectId', element: <GiftProjectPage /> },
+      { path: 'gifts/:projectId/brainstorm', element: <BrainstormPage /> },
       { path: '*', element: <Navigate to="/" replace /> },
     ],
   },

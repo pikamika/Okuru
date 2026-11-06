@@ -1,5 +1,6 @@
 import type { Repositories } from '../repositories'
 import type {
+  BrainstormMessage,
   ChecklistItem,
   Connection,
   GiftIdea,
@@ -23,6 +24,7 @@ export function createMockRepositories(): Repositories {
   const checklist = createCollection<ChecklistItem>('checklist')
   const milestones = createCollection<MilestoneSuggestion>('milestones')
   const connections = createCollection<Connection>('connections')
+  const brainstorm = createCollection<BrainstormMessage>('brainstorm')
 
   return {
     people,
@@ -73,6 +75,14 @@ export function createMockRepositories(): Repositories {
         return (await connections.list()).filter(
           (c) => c.personId === personId || c.otherPersonId === personId,
         )
+      },
+    },
+    brainstorm: {
+      ...brainstorm,
+      async listByProject(projectId) {
+        return (await brainstorm.list())
+          .filter((m) => m.projectId === projectId)
+          .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
       },
     },
     settings: {

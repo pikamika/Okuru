@@ -81,9 +81,9 @@ export function PersonProfile() {
     .sort((a, b) => (b.givenAt ?? '').localeCompare(a.givenAt ?? ''))
   const inProgress = projects.filter((p) => p.status === 'planning')
 
-  async function newProject(title: string, giftIdeaId?: string) {
+  async function newProject(title: string, giftIdeaId?: string, brainstorm = false) {
     const project = await startProject.mutateAsync({ personId: person!.id, title, giftIdeaId })
-    navigate(`/gifts/${project.id}`)
+    navigate(`/gifts/${project.id}${brainstorm ? '/brainstorm' : ''}`)
   }
 
   return (
@@ -246,9 +246,9 @@ export function PersonProfile() {
         <Button
           variant="soft"
           className="mt-3"
-          onClick={() => void newProject(`A gift for ${person.name}`)}
+          onClick={() => void newProject(`A gift for ${person.name}`, undefined, true)}
         >
-          Start a gift from scratch
+          Think of a gift together
         </Button>
       </Section>
 

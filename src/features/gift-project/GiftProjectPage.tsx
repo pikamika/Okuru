@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import type { GiftProject, Person } from '@/types'
 import {
   Button,
@@ -109,7 +109,19 @@ function GiftProjectForm({ project, person }: { project: GiftProject; person: Pe
         </p>
       </div>
 
-      <Section title="The idea">
+      <Section
+        title="The idea"
+        action={
+          !given && (
+            <Link
+              to={`/gifts/${project.id}/brainstorm`}
+              className="text-accent-strong hover:bg-accent-soft inline-flex min-h-11 items-center rounded-full px-3 text-sm"
+            >
+              Think it through
+            </Link>
+          )
+        }
+      >
         <div className="flex flex-col gap-4">
           <FormField label="What is it?">
             {(p) => (

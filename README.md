@@ -2,7 +2,7 @@
 
 _Make thoughtfulness tangible._ A mobile-first notebook for the people you care about. You jot down what you notice, and it resurfaces when a relevant moment approaches.
 
-This is the **front end only**. There is no back end, auth, payments, or AI. All data lives in `localStorage` behind a repository seam so Supabase can replace it later.
+This is the **front end only**. There is no back end, auth, payments, or real AI. The gift-brainstorm chat runs on a scripted stand-in. All data lives in `localStorage` behind a repository seam so Supabase can replace it later.
 
 ## Run it
 
@@ -48,7 +48,7 @@ component → hook (TanStack Query) → repositories (interface) → mock impl �
 ## Plugging in Supabase
 
 1. `npm i @supabase/supabase-js` and add `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` to `.env.local`.
-2. Create tables matching `src/types/` (`people`, `thoughts`, `occasions`, `gift_ideas`, `gift_projects`, `checklist_items`, `milestone_suggestions`, `connections`). Use `uuid` primary keys, `timestamptz` for `created_at`/`updated_at`, and `date` for occasion dates. Person tags and relationships can be `jsonb` columns. A connection is one row per pair (`person_id`, and either `other_person_id` or `other_name`), shown on both profiles. Add a `user_id` and row-level security on each table.
+2. Create tables matching `src/types/` (`people`, `thoughts`, `occasions`, `gift_ideas`, `gift_projects`, `checklist_items`, `milestone_suggestions`, `connections`, `brainstorm_messages`). Use `uuid` primary keys, `timestamptz` for `created_at`/`updated_at`, and `date` for occasion dates. Person tags and relationships can be `jsonb` columns. A connection is one row per pair (`person_id`, and either `other_person_id` or `other_name`), shown on both profiles. Add a `user_id` and row-level security on each table.
 3. Add `src/data/supabase/repositories.ts` exporting `createSupabaseRepositories(): Repositories`, implementing every interface in `src/data/repositories/index.ts` (map snake_case columns to camelCase).
 4. In `src/data/index.ts`, change one line:
    ```ts
@@ -61,3 +61,9 @@ No component or hook changes are needed.
 ## Deliberately not in V1
 
 The Finishing Touch (wrapping tutorials), DIY templates, personalized recommendations, and an archive. Voice and share-sheet capture are visible, disabled placeholders in the capture sheet.
+
+## The brainstorm agent
+
+"Think of a gift together" opens a chat (`src/features/brainstorm`). It calls `agent.brainstorm(context, history, text)` from `src/data/index.ts`, typed by `AgentService` in `src/data/agent/index.ts`. Today that is `src/data/agent/mock.ts`, which is scripted and only reads the person's notes, interests, MBTI and connections.
+
+To make it real, add an endpoint (for example a Vercel function or Supabase Edge Function) that holds the model API key, sends the same context and history to the model, and returns `{ text, suggestions }`. Then point `agent` at a client that calls it. Never call a model directly from the browser, since the key would be public.

@@ -32,6 +32,7 @@ function migrate(data: Db): Db {
     return { ...rest, relationships: relationship ? [relationship] : [] }
   })
   data.connections ??= []
+  data.brainstorm ??= []
   return data
 }
 
