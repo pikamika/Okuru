@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, FormField, RelationshipPicker, inputClass } from '@/components'
-import { useCreateOccasion, useCreatePerson, useSetOnboarded } from '@/hooks'
+import { Interests } from '@/features/me'
+import { MBTI_TYPES } from '@/lib/mbti'
+import { useCreateOccasion, useCreatePerson, useSetOnboarded, useUpdateProfile } from '@/hooks'
+import type { UserProfile } from '@/types'
 
 interface Draft {
   name: string
@@ -9,10 +12,12 @@ interface Draft {
   birthday: string
 }
 
+const emptyYou = (): UserProfile => ({ interests: [] })
 const empty = (): Draft => ({ name: '', relationships: [], birthday: '' })
 
 export function Onboarding() {
-  const [step, setStep] = useState<'hello' | 'people'>('hello')
+  const [step, setStep] = useState<'hello' | 'you' | 'people'>('hello')
+  const [you, setYou] = useState<UserProfile>(emptyYou())
   const [drafts, setDrafts] = useState<Draft[]>([empty(), empty(), empty()])
   const [saving, setSaving] = useState(false)
 
@@ -20,12 +25,16 @@ export function Onboarding() {
   const createPerson = useCreatePerson()
   const createOccasion = useCreateOccasion()
   const setOnboarded = useSetOnboarded()
+  const updateProfile = useUpdateProfile()
 
   const filled = drafts.filter((d) => d.name.trim())
 
   async function finish(skip: boolean) {
     setSaving(true)
     if (!skip) {
+      const hasYou =
+        you.firstName || you.lastName || you.mbti || you.birthday || you.interests.length > 0
+      if (hasYou) await updateProfile.mutateAsync(you)
       for (const d of filled) {
         const person = await createPerson.mutateAsync({
           name: d.name.trim(),
@@ -70,9 +79,90 @@ export function Onboarding() {
               and it finds its way back to you when a moment draws near.
             </p>
             <div className="mt-10 flex flex-col gap-2 sm:flex-row sm:items-center">
-              <Button onClick={() => setStep('people')}>Begin with a few people</Button>
+              <Button onClick={() => setStep('you')}>Begin</Button>
               <Button variant="ghost" onClick={() => void finish(true)} disabled={saving}>
                 Skip for now
+              </Button>
+            </div>
+          </div>
+        ) : step === 'you' ? (
+          <div className="anim-fade">
+            <p className="eyebrow mb-1.5">First, you</p>
+            <h1 className="font-display text-display">A little about you</h1>
+            <p className="text-ink-soft mt-2">
+              All optional. It helps the people you give to know you, and helps Okuru make
+              suggestions that fit.
+            </p>
+
+            <div className="mt-8 flex flex-col gap-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField label="First name">
+                  {(p) => (
+                    <input
+                      {...p}
+                      autoComplete="given-name"
+                      value={you.firstName ?? ''}
+                      onChange={(e) => setYou({ ...you, firstName: e.target.value })}
+                      className={inputClass}
+                    />
+                  )}
+                </FormField>
+                <FormField label="Last name">
+                  {(p) => (
+                    <input
+                      {...p}
+                      autoComplete="family-name"
+                      value={you.lastName ?? ''}
+                      onChange={(e) => setYou({ ...you, lastName: e.target.value })}
+                      className={inputClass}
+                    />
+                  )}
+                </FormField>
+              </div>
+              <FormField label="Your birthday (optional)" hint="The year doesn’t matter.">
+                {(p) => (
+                  <input
+                    {...p}
+                    type="date"
+                    value={you.birthday ?? ''}
+                    onChange={(e) => setYou({ ...you, birthday: e.target.value || undefined })}
+                    className={inputClass}
+                  />
+                )}
+              </FormField>
+              <FormField
+                label="Personality type (optional)"
+                hint="MBTI, if you know it. Only ever a hint."
+              >
+                {(p) => (
+                  <select
+                    {...p}
+                    value={you.mbti ?? ''}
+                    onChange={(e) => setYou({ ...you, mbti: e.target.value || undefined })}
+                    className={inputClass}
+                  >
+                    <option value="">Not sure</option>
+                    {MBTI_TYPES.map((t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </FormField>
+              <div className="flex flex-col gap-1.5">
+                <p className="text-ink-soft text-sm font-medium">Interests (optional)</p>
+                <Interests
+                  value={you.interests}
+                  onChange={(interests) => setYou({ ...you, interests })}
+                />
+              </div>
+            </div>
+
+            <div className="mt-8 flex flex-col gap-2 sm:flex-row sm:items-center">
+              <Button onClick={() => setStep('people')}>Next</Button>
+              <Button variant="ghost" onClick={() => setStep('people')}>
+                Skip this
               </Button>
             </div>
           </div>

@@ -1,7 +1,7 @@
-import { useState, type FormEvent, type KeyboardEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { Avatar, Button, FormField, Page, Section, inputClass, useToast } from '@/components'
-import { CloseIcon, PlusIcon } from '@/components/icons'
+import { PlusIcon } from '@/components/icons'
 import { isSupabaseConfigured } from '@/data/supabase/client'
 import { useAuth } from '@/features/auth'
 import {
@@ -18,6 +18,7 @@ import {
 import { formatDate } from '@/lib/dates'
 import { MBTI_TYPES } from '@/lib/mbti'
 import type { Person, ReceivedGift, SelfConnection, UserProfile } from '@/types'
+import { Interests } from './Interests'
 import { AddReceivedGiftSheet } from './AddReceivedGiftSheet'
 
 export function MyProfilePage() {
@@ -85,6 +86,17 @@ function MyProfile({ profile }: { profile: UserProfile }) {
               )}
             </FormField>
           </div>
+          <FormField label="Your birthday (optional)" hint="The year doesn’t matter.">
+            {(p) => (
+              <input
+                {...p}
+                type="date"
+                value={profile.birthday ?? ''}
+                onChange={(e) => update.mutate({ birthday: e.target.value || undefined })}
+                className={inputClass}
+              />
+            )}
+          </FormField>
           {email && (
             <FormField label="Email" hint="This is how you sign in.">
               {(p) => (
@@ -146,58 +158,6 @@ function MyProfile({ profile }: { profile: UserProfile }) {
         </div>
       )}
     </Page>
-  )
-}
-
-function Interests({ value, onChange }: { value: string[]; onChange: (next: string[]) => void }) {
-  const [text, setText] = useState('')
-  const add = () => {
-    const label = text.trim()
-    setText('')
-    if (!label || value.some((v) => v.toLowerCase() === label.toLowerCase())) return
-    onChange([...value, label])
-  }
-  const onKey = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      add()
-    }
-  }
-  return (
-    <div className="flex flex-col gap-3">
-      {value.length > 0 && (
-        <ul className="flex flex-wrap gap-2">
-          {value.map((v) => (
-            <li
-              key={v}
-              className="border-line-strong bg-card flex min-h-11 items-center gap-1 rounded-full border pr-1 pl-4"
-            >
-              {v}
-              <button
-                type="button"
-                aria-label={`Remove ${v}`}
-                onClick={() => onChange(value.filter((x) => x !== v))}
-                className="text-ink-soft hover:bg-sunken grid size-9 place-items-center rounded-full"
-              >
-                <CloseIcon width={16} height={16} />
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-      <label htmlFor="interest-input" className="sr-only">
-        Add an interest
-      </label>
-      <input
-        id="interest-input"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        onKeyDown={onKey}
-        onBlur={add}
-        placeholder="Climbing, ceramics, jazz… type and press Enter"
-        className={inputClass}
-      />
-    </div>
   )
 }
 

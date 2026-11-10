@@ -4,6 +4,8 @@ import type { Entity, Id, IsoDate } from './common'
 export interface UserProfile {
   firstName?: string
   lastName?: string
+  /** `YYYY-MM-DD`. */
+  birthday?: IsoDate
   /** Four letters, e.g. "INFJ". Optional, and only ever a hint. */
   mbti?: string
   interests: string[]
