@@ -7,6 +7,9 @@ import type {
   Id,
   MilestoneSuggestion,
   NewEntity,
+  ReceivedGift,
+  SelfConnection,
+  UserProfile,
   Occasion,
   Person,
   Thought,
@@ -64,6 +67,14 @@ export interface BrainstormRepository extends Crud<
   listByProject(projectId: Id): Promise<BrainstormMessage[]>
 }
 
+export interface ProfileRepository {
+  get(): Promise<UserProfile>
+  save(patch: Partial<UserProfile>): Promise<UserProfile>
+}
+
+export type SelfConnectionsRepository = Crud<SelfConnection, NewEntity<SelfConnection>>
+export type ReceivedGiftsRepository = Crud<ReceivedGift, NewEntity<ReceivedGift>>
+
 export interface SettingsRepository {
   getOnboarded(): Promise<boolean>
   setOnboarded(value: boolean): Promise<void>
@@ -79,5 +90,8 @@ export interface Repositories {
   milestones: MilestonesRepository
   connections: ConnectionsRepository
   brainstorm: BrainstormRepository
+  profile: ProfileRepository
+  selfConnections: SelfConnectionsRepository
+  receivedGifts: ReceivedGiftsRepository
   settings: SettingsRepository
 }

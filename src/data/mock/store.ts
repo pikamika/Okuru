@@ -33,6 +33,9 @@ function migrate(data: Db): Db {
   })
   data.connections ??= []
   data.brainstorm ??= []
+  data.profile ??= { interests: [] }
+  data.selfConnections ??= []
+  data.receivedGifts ??= []
   return data
 }
 

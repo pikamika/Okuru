@@ -5,6 +5,7 @@ import { ConnectionsPage } from '@/features/connections'
 import { GiftProjectPage } from '@/features/gift-project'
 import { Home } from '@/features/home'
 import { Onboarding } from '@/features/onboarding'
+import { MyProfilePage } from '@/features/me'
 import { PeopleIndexPane, PeopleLayout } from '@/features/people'
 import { PersonProfile } from '@/features/profile'
 import { RequireOnboarding } from './RequireOnboarding'
@@ -28,6 +29,7 @@ export const router = createBrowserRouter([
               { path: ':personId/connections', element: <ConnectionsPage /> },
             ],
           },
+          { path: 'me', element: <MyProfilePage /> },
           { path: 'gifts/:projectId', element: <GiftProjectPage /> },
           { path: 'gifts/:projectId/brainstorm', element: <BrainstormPage /> },
           { path: '*', element: <Navigate to="/" replace /> },

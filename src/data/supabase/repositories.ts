@@ -8,6 +8,9 @@ import type {
   MilestoneSuggestion,
   Occasion,
   Person,
+  ReceivedGift,
+  SelfConnection,
+  UserProfile,
   Thought,
 } from '@/types'
 import { supabase } from './client'
@@ -82,6 +85,8 @@ export function createSupabaseRepositories(): Repositories {
   const milestones = collection<MilestoneSuggestion>('milestone_suggestions')
   const connections = collection<Connection>('connections')
   const brainstorm = collection<BrainstormMessage>('brainstorm_messages')
+  const selfConnections = collection<SelfConnection>('self_connections')
+  const receivedGifts = collection<ReceivedGift>('received_gifts')
 
   const newest = (a: Thought, b: Thought) => b.observedAt.localeCompare(a.observedAt)
 
@@ -140,6 +145,27 @@ export function createSupabaseRepositories(): Repositories {
         )
       },
     },
+    profile: {
+      async get() {
+        const row = check(await supabase.from('user_profiles').select('*').maybeSingle())
+        return { interests: [], ...(row ? fromRow<Partial<UserProfile>>(row) : {}) }
+      },
+      async save(patch) {
+        const { data } = await supabase.auth.getSession()
+        const userId = data.session?.user.id
+        if (!userId) throw new Error('Not signed in')
+        const row = check(
+          await supabase
+            .from('user_profiles')
+            .upsert({ user_id: userId, ...toRow(patch, true) })
+            .select()
+            .single(),
+        )
+        return { interests: [], ...fromRow<Partial<UserProfile>>(row) }
+      },
+    },
+    selfConnections,
+    receivedGifts,
     settings: {
       async getOnboarded() {
         const row = check(await supabase.from('user_settings').select('onboarded').maybeSingle())

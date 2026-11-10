@@ -32,6 +32,7 @@ import {
   useThoughtsByPerson,
   useUpdatePerson,
 } from '@/hooks'
+import { MBTI_TYPES } from '@/lib/mbti'
 import { formatDate, nextOccurrence, daysBetween, whenPhrase, toDateOnly } from '@/lib/dates'
 import { ChevronLeftIcon } from '@/components/icons'
 import { ThoughtStream } from './ThoughtStream'
@@ -448,25 +449,6 @@ function PastGiftSheet({
     </Sheet>
   )
 }
-
-const MBTI_TYPES = [
-  'INTJ',
-  'INTP',
-  'ENTJ',
-  'ENTP',
-  'INFJ',
-  'INFP',
-  'ENFJ',
-  'ENFP',
-  'ISTJ',
-  'ISFJ',
-  'ESTJ',
-  'ESFJ',
-  'ISTP',
-  'ISFP',
-  'ESTP',
-  'ESFP',
-]
 
 function AboutPerson({ person }: { person: Person }) {
   const update = useUpdatePerson()

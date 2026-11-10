@@ -8,6 +8,8 @@ import type {
   MilestoneSuggestion,
   Occasion,
   Person,
+  ReceivedGift,
+  SelfConnection,
   Thought,
 } from '@/types'
 import { createCollection, db, save } from './store'
@@ -25,6 +27,8 @@ export function createMockRepositories(): Repositories {
   const milestones = createCollection<MilestoneSuggestion>('milestones')
   const connections = createCollection<Connection>('connections')
   const brainstorm = createCollection<BrainstormMessage>('brainstorm')
+  const selfConnections = createCollection<SelfConnection>('selfConnections')
+  const receivedGifts = createCollection<ReceivedGift>('receivedGifts')
 
   return {
     people,
@@ -85,6 +89,18 @@ export function createMockRepositories(): Repositories {
           .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
       },
     },
+    profile: {
+      async get() {
+        return { ...db().profile }
+      },
+      async save(patch) {
+        db().profile = { ...db().profile, ...patch }
+        save()
+        return { ...db().profile }
+      },
+    },
+    selfConnections,
+    receivedGifts,
     settings: {
       async getOnboarded() {
         return db().settings.onboarded

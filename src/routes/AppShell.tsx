@@ -3,7 +3,8 @@ import { LogoMark } from '@/components/LogoMark'
 import { HomeIcon, PeopleIcon, PlusIcon } from '@/components/icons'
 import { useAuth } from '@/features/auth'
 import { useCapture } from '@/features/capture'
-import { isSupabaseConfigured } from '@/data/supabase/client'
+import { Avatar } from '@/components'
+import { useProfile } from '@/hooks'
 import { cn } from '@/lib/cn'
 
 const links = [
@@ -22,7 +23,10 @@ function Wordmark() {
 
 export function AppShell() {
   const { openCapture } = useCapture()
-  const { session, signOut } = useAuth()
+  const { session } = useAuth()
+  const { data: profile } = useProfile()
+  const fullName = [profile?.firstName, profile?.lastName].filter(Boolean).join(' ')
+  const displayName = fullName || session?.user.email || 'You'
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     cn(
@@ -58,18 +62,10 @@ export function AppShell() {
         >
           <PlusIcon /> Note something
         </button>
-        {isSupabaseConfigured && session && (
-          <div className="px-2">
-            <p className="text-ink-faint truncate text-xs">{session.user.email}</p>
-            <button
-              type="button"
-              onClick={() => void signOut()}
-              className="text-ink-soft hover:text-ink min-h-11 text-sm underline underline-offset-4"
-            >
-              Sign out
-            </button>
-          </div>
-        )}
+        <NavLink to="/me" className={linkClass}>
+          <Avatar name={displayName} size={28} />
+          <span className="min-w-0 truncate">{displayName}</span>
+        </NavLink>
       </aside>
 
       <main

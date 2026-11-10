@@ -1,5 +1,8 @@
 import type {
   BrainstormMessage,
+  ReceivedGift,
+  SelfConnection,
+  UserProfile,
   ChecklistItem,
   Connection,
   GiftIdea,
@@ -21,6 +24,9 @@ export interface Db {
   milestones: MilestoneSuggestion[]
   connections: Connection[]
   brainstorm: BrainstormMessage[]
+  profile: UserProfile
+  selfConnections: SelfConnection[]
+  receivedGifts: ReceivedGift[]
   settings: { onboarded: boolean }
 }
 
@@ -210,6 +216,9 @@ export function buildSeed(): Db {
     milestones,
     connections,
     brainstorm: [],
+    profile: { interests: [] },
+    selfConnections: [],
+    receivedGifts: [],
     settings: { onboarded: false },
   }
 }
