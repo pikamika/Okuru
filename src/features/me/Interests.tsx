@@ -10,11 +10,26 @@ export function Interests({
   onChange: (next: string[]) => void
 }) {
   const [text, setText] = useState('')
+
+  /** "Volleyball, Dogs" becomes two interests. Blanks and repeats are dropped. */
+  const commit = (raw: string) => {
+    const next = [...value]
+    for (const part of raw.split(',')) {
+      const label = part.trim()
+      if (label && !next.some((v) => v.toLowerCase() === label.toLowerCase())) next.push(label)
+    }
+    if (next.length !== value.length) onChange(next)
+  }
   const add = () => {
-    const label = text.trim()
+    commit(text)
     setText('')
-    if (!label || value.some((v) => v.toLowerCase() === label.toLowerCase())) return
-    onChange([...value, label])
+  }
+  /** Typing a comma turns what came before it into badges straight away. */
+  const onType = (raw: string) => {
+    const cut = raw.lastIndexOf(',')
+    if (cut === -1) return setText(raw)
+    commit(raw.slice(0, cut))
+    setText(raw.slice(cut + 1).trimStart())
   }
   const onKey = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -50,10 +65,10 @@ export function Interests({
       <input
         id="interest-input"
         value={text}
-        onChange={(e) => setText(e.target.value)}
+        onChange={(e) => onType(e.target.value)}
         onKeyDown={onKey}
         onBlur={add}
-        placeholder="Climbing, ceramics, jazz… type and press Enter"
+        placeholder="Volleyball, dogs, jazz… separate with commas"
         className={inputClass}
       />
     </div>
