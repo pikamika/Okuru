@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
-import { RequireAuth, SignInPage } from '@/features/auth'
+import { RequireAuth, ResetPasswordPage, SignInPage } from '@/features/auth'
 import { BrainstormPage } from '@/features/brainstorm'
 import { ConnectionsPage } from '@/features/connections'
 import { GiftProjectPage } from '@/features/gift-project'
@@ -12,6 +12,7 @@ import { RequireOnboarding } from './RequireOnboarding'
 
 export const router = createBrowserRouter([
   { path: '/login', element: <SignInPage /> },
+  { path: '/reset-password', element: <ResetPasswordPage /> },
   {
     element: <RequireAuth />,
     children: [

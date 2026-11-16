@@ -6,7 +6,7 @@ import { useAuth } from './authContext'
 
 export function SignInPage() {
   const { session, loading } = useAuth()
-  const [mode, setMode] = useState<'in' | 'up'>('in')
+  const [mode, setMode] = useState<'in' | 'up' | 'forgot'>('in')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
@@ -21,7 +21,17 @@ export function SignInPage() {
     setBusy(true)
     setError(null)
     setNotice(null)
-    if (mode === 'in') {
+    if (mode === 'forgot') {
+      const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      })
+      // Same message whether or not the address has an account, so it can't be used to look people up.
+      if (err && err.status !== 400 && err.status !== 422) setError(err.message)
+      else
+        setNotice(
+          'If that email has an account, a reset link is on its way. It works once and expires in an hour.',
+        )
+    } else if (mode === 'in') {
       const { error: err } = await supabase.auth.signInWithPassword({ email, password })
       if (err) setError(err.message)
     } else {
@@ -37,9 +47,17 @@ export function SignInPage() {
       <div className="mx-auto flex min-h-dvh max-w-sm flex-col justify-center px-6 py-10">
         <p className="eyebrow mb-1.5">Okuru</p>
         <h1 className="font-display text-display">
-          {mode === 'in' ? 'Welcome back' : 'Start your notebook'}
+          {mode === 'in'
+            ? 'Welcome back'
+            : mode === 'up'
+              ? 'Start your notebook'
+              : 'Reset your password'}
         </h1>
-        <p className="text-ink-soft mt-2">Make thoughtfulness tangible.</p>
+        <p className="text-ink-soft mt-2">
+          {mode === 'forgot'
+            ? 'Enter your email and we’ll send you a link to choose a new one.'
+            : 'Make thoughtfulness tangible.'}
+        </p>
 
         <form onSubmit={submit} className="mt-8 flex flex-col gap-4">
           <FormField label="Email">
@@ -55,20 +73,22 @@ export function SignInPage() {
               />
             )}
           </FormField>
-          <FormField label="Password" hint={mode === 'up' ? 'At least 6 characters.' : undefined}>
-            {(p) => (
-              <input
-                {...p}
-                type="password"
-                autoComplete={mode === 'in' ? 'current-password' : 'new-password'}
-                required
-                minLength={6}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={inputClass}
-              />
-            )}
-          </FormField>
+          {mode !== 'forgot' && (
+            <FormField label="Password" hint={mode === 'up' ? 'At least 6 characters.' : undefined}>
+              {(p) => (
+                <input
+                  {...p}
+                  type="password"
+                  autoComplete={mode === 'in' ? 'current-password' : 'new-password'}
+                  required
+                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={inputClass}
+                />
+              )}
+            </FormField>
+          )}
           {error && (
             <p role="alert" className="text-accent-strong text-sm">
               {error}
@@ -80,20 +100,37 @@ export function SignInPage() {
             </p>
           )}
           <Button type="submit" disabled={busy}>
-            {mode === 'in' ? 'Sign in' : 'Create account'}
+            {mode === 'in' ? 'Sign in' : mode === 'up' ? 'Create account' : 'Send reset link'}
           </Button>
         </form>
 
+        {mode === 'in' && (
+          <button
+            type="button"
+            onClick={() => {
+              setMode('forgot')
+              setError(null)
+              setNotice(null)
+            }}
+            className="text-ink-soft hover:text-ink mt-2 min-h-11 self-start text-sm underline underline-offset-4"
+          >
+            Forgot your password?
+          </button>
+        )}
         <button
           type="button"
           onClick={() => {
-            setMode(mode === 'in' ? 'up' : 'in')
+            setMode(mode === 'up' ? 'in' : mode === 'forgot' ? 'in' : 'up')
             setError(null)
             setNotice(null)
           }}
           className="text-ink-soft hover:text-ink mt-4 min-h-11 self-start text-sm underline underline-offset-4"
         >
-          {mode === 'in' ? 'New here? Create an account' : 'Have an account? Sign in'}
+          {mode === 'in'
+            ? 'New here? Create an account'
+            : mode === 'up'
+              ? 'Have an account? Sign in'
+              : 'Back to sign in'}
         </button>
       </div>
     </div>

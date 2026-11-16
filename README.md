@@ -77,3 +77,10 @@ cp .env.example .env.local   # then fill in the project URL and publishable key
 ```
 
 The schema (tables, owner-only row-level security, `updated_at` triggers) was applied as the `initial_schema` migration. Every table has a `user_id` that defaults to `auth.uid()`, and one policy lets a signed-in user touch only their own rows. On Vercel, add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` under Settings → Environment Variables, then redeploy.
+
+### Password reset
+
+"Forgot your password?" on `/login` calls `supabase.auth.resetPasswordForEmail` with `redirectTo` set to `/reset-password`. Supabase emails a single-use link that expires in an hour. For this to work in each environment:
+
+- Add the site's `/**` URL (for example `http://localhost:5174/**` and your Vercel URL) under Authentication → URL Configuration → Redirect URLs.
+- Supabase's built-in sender only delivers to your own team's addresses and is heavily rate-limited. Before real users, set up a custom SMTP provider (for example Resend) under Authentication → SMTP Settings.
