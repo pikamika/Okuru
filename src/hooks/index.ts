@@ -1,6 +1,7 @@
 export * from './brainstorm'
 export * from './connections'
 export * from './gifts'
+export * from './hangouts'
 export * from './milestones'
 export * from './moments'
 export * from './occasions'

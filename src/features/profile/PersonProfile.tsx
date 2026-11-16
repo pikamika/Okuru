@@ -16,6 +16,7 @@ import { PlusIcon } from '@/components/icons'
 import type { Person } from '@/types'
 import { AddOccasionSheet, MilestoneCard } from '@/features/occasions'
 import { useCapture } from '@/features/capture'
+import { HangoutList, LogHangoutSheet } from '@/features/hangouts'
 import {
   useConnectionsByPerson,
   useCreateGiftIdea,
@@ -24,6 +25,7 @@ import {
   useDeleteOccasion,
   useGiftIdeasByPerson,
   useGiftProjectsByPerson,
+  useHangoutsByPerson,
   useOccasionsByPerson,
   usePeople,
   usePendingMilestones,
@@ -48,6 +50,7 @@ export function PersonProfile() {
   const { data: occasions = [] } = useOccasionsByPerson(personId)
   const { data: ideas = [] } = useGiftIdeasByPerson(personId)
   const { data: projects = [] } = useGiftProjectsByPerson(personId)
+  const { data: hangouts = [] } = useHangoutsByPerson(personId)
   const { data: milestones = [] } = usePendingMilestones()
   const { data: connections = [] } = useConnectionsByPerson(personId)
   const { data: everyone = [] } = usePeople()
@@ -62,6 +65,7 @@ export function PersonProfile() {
   const [addingOccasion, setAddingOccasion] = useState(false)
   const [addingIdea, setAddingIdea] = useState(false)
   const [loggingGift, setLoggingGift] = useState(false)
+  const [loggingHangout, setLoggingHangout] = useState(false)
 
   if (isLoading) return <p className="text-ink-faint">Opening the notebook…</p>
   if (!person) {
@@ -198,6 +202,23 @@ export function PersonProfile() {
         )}
       </Section>
 
+      <Section
+        title="Hangouts"
+        action={
+          <Button variant="ghost" onClick={() => setLoggingHangout(true)}>
+            Log one
+          </Button>
+        }
+      >
+        {hangouts.length === 0 ? (
+          <p className="text-ink-soft">
+            Time spent together is where you learn the most. Log one and note what it showed you.
+          </p>
+        ) : (
+          <HangoutList hangouts={hangouts} />
+        )}
+      </Section>
+
       <Section title="What you’ve noticed">
         {thoughts.length === 0 ? (
           <p className="text-ink-soft">Nothing yet. Even a small thing is worth keeping.</p>
@@ -312,6 +333,13 @@ export function PersonProfile() {
           toast('Idea saved.')
           setAddingIdea(false)
         }}
+      />
+
+      <LogHangoutSheet
+        open={loggingHangout}
+        onClose={() => setLoggingHangout(false)}
+        people={everyone}
+        person={person}
       />
 
       <PastGiftSheet

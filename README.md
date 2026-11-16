@@ -58,6 +58,13 @@ component → hook (TanStack Query) → repositories (interface) → mock impl �
 
 No component or hook changes are needed.
 
+## Hangouts
+
+Log time spent with someone (`src/features/hangouts`) from Home or a person's page: what you did, when, and
+whether it _taught you something new_, _confirmed a hunch_ or _surprised you_. A takeaway is also saved as a
+thought on that person, so it resurfaces like anything else you've noticed. Hangouts are entered by hand for
+now; reading Google Calendar to prompt you after an event is planned as a follow-up.
+
 ## Deliberately not in V1
 
 The Finishing Touch (wrapping tutorials), DIY templates, personalized recommendations, and an archive. Voice and share-sheet capture are visible, disabled placeholders in the capture sheet.

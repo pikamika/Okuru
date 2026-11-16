@@ -4,6 +4,7 @@ import type {
   Connection,
   GiftIdea,
   GiftProject,
+  Hangout,
   Id,
   MilestoneSuggestion,
   NewEntity,
@@ -59,6 +60,11 @@ export interface ConnectionsRepository extends Crud<Connection, NewEntity<Connec
   listByPerson(personId: Id): Promise<Connection[]>
 }
 
+export interface HangoutsRepository extends Crud<Hangout, NewEntity<Hangout>> {
+  /** Most recent first. */
+  listByPerson(personId: Id): Promise<Hangout[]>
+}
+
 export interface BrainstormRepository extends Crud<
   BrainstormMessage,
   NewEntity<BrainstormMessage>
@@ -89,6 +95,7 @@ export interface Repositories {
   checklist: ChecklistRepository
   milestones: MilestonesRepository
   connections: ConnectionsRepository
+  hangouts: HangoutsRepository
   brainstorm: BrainstormRepository
   profile: ProfileRepository
   selfConnections: SelfConnectionsRepository

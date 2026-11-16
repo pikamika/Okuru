@@ -5,6 +5,7 @@ import type {
   Connection,
   GiftIdea,
   GiftProject,
+  Hangout,
   MilestoneSuggestion,
   Occasion,
   Person,
@@ -84,6 +85,7 @@ export function createSupabaseRepositories(): Repositories {
   const checklist = collection<ChecklistItem>('checklist_items')
   const milestones = collection<MilestoneSuggestion>('milestone_suggestions')
   const connections = collection<Connection>('connections')
+  const hangouts = collection<Hangout>('hangouts')
   const brainstorm = collection<BrainstormMessage>('brainstorm_messages')
   const selfConnections = collection<SelfConnection>('self_connections')
   const receivedGifts = collection<ReceivedGift>('received_gifts')
@@ -135,6 +137,14 @@ export function createSupabaseRepositories(): Repositories {
             .or(`person_id.eq.${personId},other_person_id.eq.${personId}`),
         )
         return (rows ?? []).map((r) => fromRow<Connection>(r))
+      },
+    },
+    hangouts: {
+      ...hangouts,
+      async listByPerson(personId) {
+        return (await hangouts.where('person_id', personId)).sort((a, b) =>
+          b.happenedAt.localeCompare(a.happenedAt),
+        )
       },
     },
     brainstorm: {

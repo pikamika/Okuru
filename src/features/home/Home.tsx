@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, EmptyState, Page, ThreadBridge } from '@/components'
 import { PlusIcon } from '@/components/icons'
 import { useCapture } from '@/features/capture'
+import { LogHangoutSheet } from '@/features/hangouts'
 import { MilestoneCard } from '@/features/occasions'
 import { useMoments, usePendingMilestones, usePeople } from '@/hooks'
 import { MomentCard } from './MomentCard'
@@ -20,6 +22,7 @@ export function Home() {
   const { data: milestones = [] } = usePendingMilestones()
   const { openCapture } = useCapture()
   const milestone = milestones[0]
+  const [loggingHangout, setLoggingHangout] = useState(false)
 
   return (
     <Page>
@@ -69,6 +72,15 @@ export function Home() {
         <span className="font-display text-title">Noticed something lately?</span>
       </button>
 
+      <button
+        type="button"
+        onClick={() => setLoggingHangout(true)}
+        className="border-line-strong text-ink-soft hover:bg-sunken mt-3 flex min-h-14 w-full items-center gap-4 rounded-lg border border-dashed pr-5 pl-[29px] text-left transition-colors"
+      >
+        <PlusIcon className="text-accent" />
+        <span className="font-display text-title">Just spent time with someone?</span>
+      </button>
+
       {milestone && (
         <section className="mt-8" aria-label="A question">
           <MilestoneCard suggestion={milestone} />
@@ -85,6 +97,11 @@ export function Home() {
           </Link>
         </p>
       )}
+      <LogHangoutSheet
+        open={loggingHangout}
+        onClose={() => setLoggingHangout(false)}
+        people={people}
+      />
     </Page>
   )
 }

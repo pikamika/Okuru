@@ -14,6 +14,8 @@ export const keys = {
   milestones: ['milestones'] as const,
   connections: ['connections'] as const,
   connectionsByPerson: (id: string) => ['connections', 'person', id] as const,
+  hangoutsByPerson: (id: string) => ['hangouts', 'person', id] as const,
+  hangouts: ['hangouts'] as const,
   brainstorm: (projectId: string) => ['brainstorm', projectId] as const,
   profile: ['profile'] as const,
   selfConnections: ['selfConnections'] as const,

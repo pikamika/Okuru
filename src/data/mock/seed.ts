@@ -7,6 +7,7 @@ import type {
   Connection,
   GiftIdea,
   GiftProject,
+  Hangout,
   MilestoneSuggestion,
   Occasion,
   Person,
@@ -23,6 +24,7 @@ export interface Db {
   checklist: ChecklistItem[]
   milestones: MilestoneSuggestion[]
   connections: Connection[]
+  hangouts: Hangout[]
   brainstorm: BrainstormMessage[]
   profile: UserProfile
   selfConnections: SelfConnection[]
@@ -215,6 +217,7 @@ export function buildSeed(): Db {
     checklist: [],
     milestones,
     connections,
+    hangouts: [],
     brainstorm: [],
     profile: { interests: [] },
     selfConnections: [],

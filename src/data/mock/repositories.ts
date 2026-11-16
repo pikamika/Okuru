@@ -5,6 +5,7 @@ import type {
   Connection,
   GiftIdea,
   GiftProject,
+  Hangout,
   MilestoneSuggestion,
   Occasion,
   Person,
@@ -26,6 +27,7 @@ export function createMockRepositories(): Repositories {
   const checklist = createCollection<ChecklistItem>('checklist')
   const milestones = createCollection<MilestoneSuggestion>('milestones')
   const connections = createCollection<Connection>('connections')
+  const hangouts = createCollection<Hangout>('hangouts')
   const brainstorm = createCollection<BrainstormMessage>('brainstorm')
   const selfConnections = createCollection<SelfConnection>('selfConnections')
   const receivedGifts = createCollection<ReceivedGift>('receivedGifts')
@@ -79,6 +81,14 @@ export function createMockRepositories(): Repositories {
         return (await connections.list()).filter(
           (c) => c.personId === personId || c.otherPersonId === personId,
         )
+      },
+    },
+    hangouts: {
+      ...hangouts,
+      async listByPerson(personId) {
+        return (await hangouts.list())
+          .filter((h) => h.personId === personId)
+          .sort((a, b) => b.happenedAt.localeCompare(a.happenedAt))
       },
     },
     brainstorm: {
