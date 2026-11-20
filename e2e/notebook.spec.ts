@@ -23,5 +23,6 @@ test('adding a person from the people list', async ({ page }) => {
   const sheet = page.getByRole('dialog')
   await sheet.getByLabel('Name').fill('Jordan')
   await sheet.getByRole('button', { name: 'Start their notebook' }).click()
-  await expect(page.getByRole('link', { name: /Jordan/ })).toBeVisible()
+  // Saving opens their new notebook.
+  await expect(page.getByRole('heading', { level: 1, name: 'Jordan' })).toBeVisible()
 })
