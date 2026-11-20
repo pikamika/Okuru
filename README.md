@@ -65,6 +65,21 @@ whether it _taught you something new_, _confirmed a hunch_ or _surprised you_. A
 thought on that person, so it resurfaces like anything else you've noticed. Hangouts are entered by hand for
 now; reading Google Calendar to prompt you after an event is planned as a follow-up.
 
+## Tests and CI
+
+```bash
+npm test          # unit and component tests (Vitest, Testing Library)
+npm run test:e2e  # end-to-end tests in a real browser (Playwright), mobile and desktop
+npm run check     # everything CI runs: lint, format, types, unit tests, build, e2e
+```
+
+Both layers run against the local mock data, never Supabase, so they need no keys and never touch your real
+account. On first use of the e2e tests run `npx playwright install chromium`.
+
+`.github/workflows/ci.yml` runs all of it on every push to `master` and on every pull request, and uploads a
+Playwright report when an e2e test fails. To block merges on a red build, turn on branch protection for `master`
+in GitHub and require the **Lint, types, unit tests, build** and **End-to-end tests** checks.
+
 ## Deliberately not in V1
 
 The Finishing Touch (wrapping tutorials), DIY templates, personalized recommendations, and an archive. Voice and share-sheet capture are visible, disabled placeholders in the capture sheet.
